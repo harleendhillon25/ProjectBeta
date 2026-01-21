@@ -1,5 +1,5 @@
 
-import { pool } from "../db/connect.js";
+const pool = require('../db/connect.js');
 
 /*
  * refreshAlertsFromSources
@@ -11,7 +11,7 @@ import { pool } from "../db/connect.js";
  */
 
 
-export async function refresh_Alerts_From_Sources({
+async function refresh_alerts_from_sources({
   window_minutes = 60,
   failed_threshold = 3,
   abuse_threshold = 50,
@@ -130,7 +130,7 @@ export async function refresh_Alerts_From_Sources({
   }
 }
 
-export async function get_stored_alerts({ limit = 100 } = {}) {
+async function get_stored_alerts({ limit = 100 } = {}) {
   const sql = `
     SELECT
       id,
@@ -176,3 +176,8 @@ function severity_from_abuse_score(abuse_score) {
   if (abuse_score >= 50) return "MEDIUM";
   return "LOW";
 }
+
+module.exports = {
+  refresh_alerts_from_sources,
+  get_stored_alerts,
+};

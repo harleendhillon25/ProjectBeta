@@ -3,7 +3,7 @@
 //Here will be the requires from the ingest.model (for the IPs) and I assume the iprep.model (to send the response)
 const iprepModel = require("../models/iprep.model.js")
 
-const API_KEY = process.env.ABUSE_KEY
+const API_KEY = process.env.ABUSE_KEY 
 //Need to put key in .env
 
 //AbuseIPDB CHECK function
