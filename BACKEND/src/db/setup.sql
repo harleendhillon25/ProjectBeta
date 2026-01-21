@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS client_logs (
 
 CREATE TABLE IF NOT EXISTS ip_reputation (
   id BIGSERIAL PRIMARY KEY,
-  ip_address TEXT NOT NULL,
+  ip_address TEXT NOT NULL UNIQUE,
   abuse_confidence INT NOT NULL,         -- 0-100
   usage_type TEXT,
   country_name TEXT,
