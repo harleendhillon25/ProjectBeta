@@ -2,10 +2,81 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=], initial-scale=1.0">
-    <title>Document</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="assets/style.css">
+    <title>Security</title>
 </head>
 <body>
-    
+
+  <!-- Sidebar -->
+ <aside class="sidebar">
+  <div class="logo-wrapper">
+    <img src="assets/images/riskRadorLogo.PNG" alt="RiskRadar Logo" class="logo">
+  </div>
+
+  <a class="active">Dashboard</a>
+  <a>Threat & Security</a>
+  <a>Admin Management</a>
+</aside>
+
+
+
+  <!-- Main content -->
+  <main class="main">
+
+    <div class="container">
+
+    <div class="alert">
+      ⚠️ Alert: Multiple failed login attempts detected from a high-risk IP
+    </div>
+
+    <h2>IP Security Details</h2>
+
+    <div class="info-grid">
+      <div class="info-box">
+        <div class="label">IP Address</div>
+        <div class="value">193.27.12.56</div>
+      </div>
+
+      <div class="info-box">
+        <div class="label">Risk Level</div>
+        <div class="value">
+          <span class="risk">HIGH RISK</span>
+        </div>
+      </div>
+
+      <div class="info-box">
+        <div class="label">Location</div>
+        <div class="value">Moscow, Russia</div>
+      </div>
+
+      <div class="info-box">
+        <div class="label">Threat Type</div>
+        <div class="value">Credential Stuffing</div>
+      </div>
+    </div>
+
+    <h3>Why this IP was flagged</h3>
+    <p>
+      This IP address has been reported by multiple public security databases and
+      is associated with automated login attempts across multiple websites.
+    </p>
+
+    <h3>Recommended Actions</h3>
+    <ul>
+      <li>Block the IP address at firewall or application level</li>
+      <li>Enable CAPTCHA after repeated failed login attempts</li>
+      <li>Review recent authentication logs for affected accounts</li>
+    </ul>
+
+    <div class="actions">
+      <button class="btn btn-danger">Block IP Address</button>
+      <button class="btn btn-secondary">Learn More</button>
+    </div>
+
+  </div>
+
+  </main>
+
 </body>
 </html>
