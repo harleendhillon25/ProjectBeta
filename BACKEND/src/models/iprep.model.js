@@ -27,10 +27,10 @@ async function updateIPReputation(record) {
         checked_at
         )
         VALUES ($1, $2, $3, $4, $5, $6, $7)
-        ON CONFLICT (ipAddress)
+        ON CONFLICT (ip_address)
         DO UPDATE SET
             abuse_confidence = EXCLUDED.abuse_confidence,
-            usage_type = EXCLUDED.usage_type
+            usage_type = EXCLUDED.usage_type,
             country_name = EXCLUDED.country_name,
             total_reports = EXCLUDED.total_reports,
             last_reported_at = EXCLUDED.last_reported_at,

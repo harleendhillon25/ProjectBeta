@@ -1,0 +1,25 @@
+{
+  "dependencies": {
+    "dotenv": "^17.2.3",
+    "pg": "^8.17.2"
+  },
+  "name": "projectbeta",
+  "version": "1.0.0",
+  "description": ".github --> workflows --> yml backend -->      risk processing engine --> app, index, fetchLog.js, fetchIP/API.js     log parser --> fetchRawLog.js (output of raw data goes into log_csv) frontend --> html, css, js, loadLog.js  tests --> front end/, back end  db --> log_csv, log.json",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/harleendhillon25/ProjectBeta.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/harleendhillon25/ProjectBeta/issues"
+  },
+  "homepage": "https://github.com/harleendhillon25/ProjectBeta#readme"
+}
