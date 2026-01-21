@@ -3,9 +3,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="stylesheet" href="assets/style.css">
+    <title>Dashboard</title>
 </head>
 <body>
-    
+
+  <!-- Sidebar -->
+ <aside class="sidebar">
+  <div class="logo-wrapper">
+    <img src="./assets/images/riskRadorLogo.PNG" alt="RiskRadar Logo" class="logo">
+  </div>
+
+  <a class="active">Dashboard</a>
+  <a>Threat & Security</a>
+  <a>Admin Management</a>
+</aside>
+
+
+
+  <!-- Main content -->
+  <main class="main">
+
+    <!-- Header -->
+   <div class="header">
+  <h1>Main Dashboard</h1>
+  <button class="logout-btn">Log out</button>
+  </div>
+
+
+    <!-- Risk banner -->
+    <div class="risk-banner">
+      ⚠️ Moderate Risk Detected Today
+    </div>
+
+    <div class="metrics">
+
+  <!-- Login Outcomes Card -->
+  <div class="metric-card login-card">
+    <h3>Login Outcomes</h3>
+
+    <div class="login-outcomes">
+      <div class="donut-placeholder small">
+        <div class="donut-center">
+          <strong>76%</strong>
+          <span>Successful</span>
+        </div>
+      </div>
+
+      <div class="outcome-legend">
+        <p><span class="dot success"></span> 137 Success</p>
+        <p><span class="dot failed"></span> 43 Failed</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unique IPs -->
+  <div class="metric-card">
+    <h3>Unique IPs</h3>
+    <p>129</p>
+  </div>
+
+  <!-- Blacklisted IPs -->
+  <div class="metric-card">
+    <h3>Blacklisted IPs</h3>
+    <p>7</p>
+  </div>
+
+</div>
+
+
+
+    <!-- Activity Overview -->
+    <div class="section">
+      <h2>Activity Overview</h2>
+      <div class="graph-placeholder">
+        Login Attempts Over Time (Graph Placeholder)
+      </div>
+    </div>
+
+    <!-- Recent Suspicious Activity -->
+    <div class="section">
+      <h2>Recent Suspicious Activity</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>IP Address</th>
+            <th>Location</th>
+            <th>Reason</th>
+            <th>Last Seen</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>193.27.12.56</td>
+            <td>Russia</td>
+            <td><span class="tag high">Blacklisted</span></td>
+            <td>14:32</td>
+          </tr>
+          <tr>
+            <td>12.45.77.21</td>
+            <td>China</td>
+            <td><span class="tag medium">Brute Force</span></td>
+            <td>13:58</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </main>
+
 </body>
 </html>
