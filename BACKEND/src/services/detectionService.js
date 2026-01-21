@@ -1,13 +1,16 @@
 // This will call the IPs from (assuming) the ingest.model, and then will post them within the API
+require("dotenv").config();  // put this as the first line
+
 
 //Here will be the requires from the ingest.model (for the IPs) and I assume the iprep.model (to send the response)
 const iprepModel = require("../models/iprep.model.js")
 
-const API_KEY = process.env.ABUSE_KEY
+const API_KEY = process.env.ABUSE_KEY 
 //Need to put key in .env
 
 //AbuseIPDB CHECK function
 async function callAbuseIPDB(ipAddress) {
+    console.log(API_KEY)
     if(!API_KEY) {
         throw new Error("You have not provided a valid API key");
     }
