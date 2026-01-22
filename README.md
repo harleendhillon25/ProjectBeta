@@ -104,8 +104,6 @@ backend
 
 
 
-const apiAuth = require("./middleware/api.auth.js")
-const clientAuth = require("./middleware/client.auth.js")
+### package dependencies
 
-app.use(apiAuth);
-app.use(clientAuth);
+npm install bcrypt uuid jsonwebtoken
