@@ -4,7 +4,7 @@ require("dotenv").config();  // put this as the first line
 
 //Here will be the requires from the ingest.model (for the IPs) and I assume the iprep.model (to send the response)
 const iprepModel = require("../models/iprep.model.js")
-const getDistinctIPsInWindow = require("../models/ingest.model.js")
+const {getDistinctIPsInWindow} = require("../models/ingest.model.js")
 
 const API_KEY = process.env.ABUSE_KEY 
 //Need to put key in .env
