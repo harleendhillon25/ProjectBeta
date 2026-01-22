@@ -106,4 +106,4 @@ backend
 
 ### package dependencies
 
-npm install bcrypt uuid jsonwebtoken
+npm install bcrypt uuid jsonwebtoken cors express
