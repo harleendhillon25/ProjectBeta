@@ -11,17 +11,17 @@ const bcrypt = require('bcrypt');
       [name, email, hash, apiKey]
     );
     return res.rows[0];
-  },
+  }
 
   async function getClientByEmail(email) {
     const res = await pool.query('SELECT * FROM clients WHERE email=$1', [email]);
     return res.rows[0];
-  },
+  }
 
   async function getClientByApiKey(apiKey) {
     const res = await pool.query('SELECT * FROM clients WHERE api_key=$1', [apiKey]);
     return res.rows[0];
-  },
+  }
 
   async function regenerateApiKey(clientId) {
     const newKey = uuidv4();
@@ -30,7 +30,7 @@ const bcrypt = require('bcrypt');
       [newKey, clientId]
     );
     return res.rows[0].api_key;
-  },
+  }
 
   async function verifyPassword(client, password) {
     return await bcrypt.compare(password, client.password_hash);
