@@ -1,4 +1,4 @@
-const clientModel = require('../models/clientModel.js');
+const clientModel = require('../models/clients.model.js');
 
 module.exports = async function apiKeyAuth(req, res, next) {
   const apiKey = req.header('x-api-key');
