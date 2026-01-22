@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "dotenv": "^17.2.3",
+    "jest": "^30.2.0",
     "pg": "^8.17.2"
   },
   "name": "projectbeta",
@@ -8,10 +9,16 @@
   "description": ".github --> workflows --> yml backend -->      risk processing engine --> app, index, fetchLog.js, fetchIP/API.js     log parser --> fetchRawLog.js (output of raw data goes into log_csv) frontend --> html, css, js, loadLog.js  tests --> front end/, back end  db --> log_csv, log.json",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
   },
-  
+  "jest": {
+    "testEnvironment": "node",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/"
+    ]
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/harleendhillon25/ProjectBeta.git"
