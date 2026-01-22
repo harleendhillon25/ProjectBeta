@@ -9,6 +9,7 @@
  */
 
 jest.mock("../../../src/models/alerts.model.js", () => ({
+
   refresh_alerts_from_sources: jest.fn(),
   get_stored_alerts: jest.fn(),
 }));
