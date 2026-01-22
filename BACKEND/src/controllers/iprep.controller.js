@@ -1,5 +1,5 @@
 //This controller will allow the manual refresh
-const enrichRecentIPs = require("../services/detectionService.js")
+const {enrichRecentIPs} = require("../services/detectionService.js")
 
 async function refresh_ip_reputation(req, res) {
     try {
@@ -24,5 +24,5 @@ async function refresh_ip_reputation(req, res) {
 }
 
 module.exports = {
-    refresh_ip_reputation
+    refresh_ip_reputation,
 }
