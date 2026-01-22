@@ -25,4 +25,13 @@ document.getElementById("login-form").addEventListener("submit", async (e) => {
   }
 });
 
+// Forgot password link
+document.getElementById("forgot-password").addEventListener("click", (e) => {
+  e.preventDefault();
+  alert(
+    "Your request has been sent to the administrator.\n\nThey will reset your password and email you shortly."
+  );
+});
+
+
 
