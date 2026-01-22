@@ -12,7 +12,7 @@ document.getElementById("login-form").addEventListener("submit", async (e) => {
     body: JSON.stringify({
       email: form.get("email"),
       password: form.get("password"),
-    }),
+    })
   };
 
   const response = await fetch("remeber to put the link in", options);
