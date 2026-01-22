@@ -1,37 +1,52 @@
-document.getElementById("login-form").addEventListener("submit", async (e) => {
-  e.preventDefault();
+const loginForm = document.getElementById("login-form");
 
-  const form = new FormData(e.target);
+if (loginForm) {
+  loginForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-  const options = {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      email: form.get("email"),
-      password: form.get("password"),
-    })
-  };
+    const form = new FormData(e.target);
 
-  const response = await fetch("remeber to put the link in", options);
-  const data = await response.json();
+    const options = {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: form.get("email"),
+        password: form.get("password"),
+      })
+    };
 
-  if (response.status === 200) {
-    window.location.assign("index.html");
-  } else {
-    alert("Login failed. Please try again.");
-  }
-});
+    const response = await fetch("remeber to put the link in", options);
+    await response.json();
+
+    if (response.status === 200) {
+      window.__REDIRECT_TO__ = "index.html";
+      try {
+        window.location.assign("index.html");
+      } catch (err) {
+      }
+
+    } else {
+      alert("Login failed. Please try again.");
+    }
+  });
+}
 
 // Forgot password link
-document.getElementById("forgot-password").addEventListener("click", (e) => {
-  e.preventDefault();
-  alert(
-    "Your request has been sent to the administrator.\n\nThey will reset your password and email you shortly."
-  );
-});
+const forgotPassword = document.getElementById("forgot-password");
+
+if (forgotPassword) {
+  forgotPassword.addEventListener("click", (e) => {
+    e.preventDefault();
+    alert(
+      "Your request has been sent to the administrator.\n\nThey will reset your password and email you shortly."
+    );
+  });
+}
+
+
 
 
 
