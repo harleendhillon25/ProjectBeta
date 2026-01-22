@@ -103,3 +103,9 @@ backend
 
 
 
+
+const apiAuth = require("./middleware/api.auth.js")
+const clientAuth = require("./middleware/client.auth.js")
+
+app.use(apiAuth);
+app.use(clientAuth);
