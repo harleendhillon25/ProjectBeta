@@ -4,6 +4,7 @@ require("dotenv").config();  // put this as the first line
 
 //Here will be the requires from the ingest.model (for the IPs) and I assume the iprep.model (to send the response)
 const iprepModel = require("../models/iprep.model.js")
+const {getDistinctIPsInWindow} = require("../models/ingest.model.js")
 
 const API_KEY = process.env.ABUSE_KEY 
 //Need to put key in .env
@@ -47,7 +48,7 @@ async function callAbuseIPDB(ipAddress) {
     };
 }
 
-//This is where we call upon the model and what the controller takes from
+//Don't think I need this function anymore, as was good for simply testing one, enrich RecentIPs is what it will be using.
 async function enrichIP(ipAddress) {
     const record = await callAbuseIPDB(ipAddress);
 
@@ -56,6 +57,32 @@ async function enrichIP(ipAddress) {
     return savedRow;
 }
 
+//Get the IPs from the injest Model.
+async function enrichRecentIPs({ windowMinutes = 60 } = {}) {
+    const ips = await getDistinctIPsInWindow(windowMinutes) //Currently gets the last 60 minutes worth of IPs in table, can be changed.
+
+    const results = []
+
+    for (const ip of ips) {
+        try {
+            const record = await callAbuseIPDB(ip)
+            const savedRow = await iprepModel.updateIPReputation(record)
+            results.push({
+                ip,
+                status: "ok",
+                row: savedRow
+            })
+        } catch (error) {
+            console.error(`Failed to enrich IP ${ip}:`, error.message)
+            results.push({
+                ip,
+                status: "error",
+                error: error.message
+            })
+        }
+    }
+    return results;
+}
 
 //Quick check to see if it works before I move onto iprepmodel, need terminal access to try this
 if (require.main === module) {
@@ -72,5 +99,6 @@ if (require.main === module) {
 
 module.exports = {
     callAbuseIPDB,
-    enrichIP
+    enrichIP,
+    enrichRecentIPs
 }

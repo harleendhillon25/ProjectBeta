@@ -8,7 +8,8 @@
  * We mock the model functions so these tests do NOT touch the database.
  */
 
-jest.mock("../models/alerts.model.js", () => ({
+jest.mock("../../../src/models/alerts.model.js", () => ({
+
   refresh_alerts_from_sources: jest.fn(),
   get_stored_alerts: jest.fn(),
 }));
@@ -16,9 +17,9 @@ jest.mock("../models/alerts.model.js", () => ({
 const {
   refresh_alerts_from_sources,
   get_stored_alerts,
-} = require("../models/alerts.model.js");
+} = require("../../../src/models/alerts.model.js");
 
-const { refresh_alerts, get_alerts } = require("../controllers/alerts.controller.js");
+const { refresh_alerts, get_alerts } = require("../../../src/controllers/alerts.controller.js");
 
 /**
  * Helper: create a mock Express res object
