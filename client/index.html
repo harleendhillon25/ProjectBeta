@@ -31,7 +31,8 @@
       <!-- Header -->
       <div class="header">
         <h1>Main Dashboard</h1>
-<button type="button" class="logout-btn">Log out</button>
+        <button type="button" class="logout-btn">Log out</button>
+        <button type="button" id="refresh-alerts">Refresh Alerts</button>
       </div>
 
       <!-- Risk banner -->
@@ -93,17 +94,12 @@
               <th>Time</th>
               <th>Threat</th>
               <th>Severity</th>
-              <th>Location</th>
+              <th>IP Address</th>
             </tr>
           </thead>
-          <tbody>
-            <tr>
-              <td>23/01/2026 14:32</td>
-              <td>Credential Stuffing</td>
-              <td><span class="tag high">High</span></td>
-              <td>Russia</td>
-            </tr>
-          </tbody>
+         <tbody id="alerts-table-body">
+             <!-- Alerts injected here -->
+         </tbody>
         </table>
       </div>
 
