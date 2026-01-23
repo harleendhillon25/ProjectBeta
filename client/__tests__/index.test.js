@@ -1,6 +1,5 @@
 const { renderDOM } = require("./helpers");
 
-// index.html tests
 describe("Dashboard (index.html)", () => {
   let dom;
   let document;
@@ -8,6 +7,11 @@ describe("Dashboard (index.html)", () => {
   beforeEach(async () => {
     dom = await renderDOM("./client/index.html");
     document = dom.window.document;
+
+    global.window = dom.window;
+    global.document = document;
+
+    require("../js/index.js");
   });
 
   test("page loads with correct title", () => {
@@ -15,51 +19,40 @@ describe("Dashboard (index.html)", () => {
   });
 
   test("renders sidebar navigation", () => {
-    const sidebar = document.querySelector(".sidebar");
-    expect(sidebar).toBeTruthy();
+    expect(document.querySelector(".sidebar")).toBeTruthy();
   });
 
   test("sidebar contains 3 navigation links", () => {
-    const links = document.querySelectorAll(".sidebar a");
-    expect(links.length).toBe(3);
+    expect(document.querySelectorAll(".sidebar a").length).toBe(3);
   });
 
   test("renders Main Dashboard heading", () => {
-    const h1 = document.querySelector("h1");
-    expect(h1).toBeTruthy();
-    expect(h1.textContent).toBe("Main Dashboard");
+    expect(document.querySelector("h1").textContent).toBe("Main Dashboard");
   });
 
   test("logout button exists", () => {
-    const logoutBtn = document.querySelector(".logout-btn");
-    expect(logoutBtn).toBeTruthy();
-    expect(logoutBtn.textContent).toBe("Log out");
+    expect(document.querySelector(".logout-btn").textContent).toBe("Log out");
   });
 
   test("risk banner is displayed", () => {
-    const banner = document.querySelector(".risk-banner");
-    expect(banner).toBeTruthy();
-    expect(banner.textContent).toContain("Moderate Risk");
+    expect(document.querySelector(".risk-banner").textContent)
+      .toContain("Moderate Risk");
   });
 
   test("metrics section displays 3 metric cards", () => {
-    const cards = document.querySelectorAll(".metric-card");
-    expect(cards.length).toBe(3);
+    expect(document.querySelectorAll(".metric-card").length).toBe(3);
   });
 
   test("login outcomes card exists", () => {
-    const loginCard = document.querySelector(".login-card");
-    expect(loginCard).toBeTruthy();
-    expect(loginCard.textContent).toContain("Login Outcomes");
+    expect(document.querySelector(".login-card").textContent)
+      .toContain("Login Outcomes");
   });
 
   test("recent suspicious activity table exists", () => {
-    const table = document.querySelector("table");
-    expect(table).toBeTruthy();
+    expect(document.querySelector("table")).toBeTruthy();
   });
 
   test("table contains at least one suspicious IP entry", () => {
-    const rows = document.querySelectorAll("tbody tr");
-    expect(rows.length).toBeGreaterThan(0);
+    expect(document.querySelectorAll("tbody tr").length).toBeGreaterThan(0);
   });
 });
