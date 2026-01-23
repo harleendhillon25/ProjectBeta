@@ -8,8 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const form = new FormData(loginForm);
 
-    // 🔧 TEMP: frontend-only login (until backend is ready)
-    // REMOVE fetch later if needed
+
     if (!form.get("email") || !form.get("password")) {
       alert("Please fill in all fields");
       return;
