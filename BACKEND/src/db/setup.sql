@@ -47,3 +47,13 @@ CREATE TABLE IF NOT EXISTS alerts (
 
 -- CREATE INDEX IF NOT EXISTS idx_alerts_ip
 --   ON alerts (ip_address);
+
+CREATE TABLE clients (
+  id BIGSERIAL PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  email VARCHAR(150) NOT NULL UNIQUE,
+  password_hash TEXT NOT NULL,
+  api_key TEXT NOT NULL UNIQUE,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);

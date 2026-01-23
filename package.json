@@ -18,7 +18,8 @@
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "start": "node BACKEND/src/server.js",
-    "dev": "nodemon BACKEND/src/server.js"
+    "dev": "nodemon BACKEND/src/server.js",
+    "setup-db": "node ./BACKEND/src/db/setup.js"
   },
   "jest": {
     "testEnvironment": "node",
