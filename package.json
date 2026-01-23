@@ -39,7 +39,6 @@
   },
   "homepage": "https://github.com/harleendhillon25/ProjectBeta#readme",
   "devDependencies": {
-    "jest-environment-jsdom": "^30.2.0",
-    "nodemon": "^3.1.11"
+    "jest-environment-jsdom": "^30.2.0"
   }
 }
