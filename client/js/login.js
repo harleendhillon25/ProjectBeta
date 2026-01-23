@@ -1,5 +1,13 @@
 const loginForm = document.getElementById("login-form");
 
+// LOGIN PAGE → DASHBOARD
+if (loginForm) {
+  loginForm.addEventListener("submit", (e) => {
+    e.preventDefault(); // stop real form submit
+    window.location.href = "index.html";
+  });
+}
+
 if (loginForm) {
   loginForm.addEventListener("submit", async (e) => {
     e.preventDefault();
