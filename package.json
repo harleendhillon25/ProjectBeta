@@ -15,18 +15,15 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
+    "test:backend": "jest --selectProjects backend",
+    "test:frontend": "jest --selectProjects frontend",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "start": "node BACKEND/src/server.js",
     "dev": "nodemon BACKEND/src/server.js",
     "setup-db": "node ./BACKEND/src/db/setup.js"
   },
-  "jest": {
-    "testEnvironment": "node",
-    "coveragePathIgnorePatterns": [
-      "/node_modules/"
-    ]
-  },
+  
   "repository": {
     "type": "git",
     "url": "git+https://github.com/harleendhillon25/ProjectBeta.git"
