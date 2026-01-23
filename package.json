@@ -30,5 +30,8 @@
   "bugs": {
     "url": "https://github.com/harleendhillon25/ProjectBeta/issues"
   },
-  "homepage": "https://github.com/harleendhillon25/ProjectBeta#readme"
+  "homepage": "https://github.com/harleendhillon25/ProjectBeta#readme",
+  "devDependencies": {
+    "jest-environment-jsdom": "^30.2.0"
+  }
 }
