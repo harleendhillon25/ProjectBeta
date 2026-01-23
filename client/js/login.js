@@ -1,5 +1,20 @@
 const loginForm = document.getElementById("login-form");
 
+// LOGIN PAGE → DASHBOARD
+if (loginForm) {
+  loginForm.addEventListener("submit", (e) => {
+    e.preventDefault(); // stop real form submit
+    window.location.href = "index.html";
+  });
+}
+
+if (loginForm) {
+  loginForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+     window.location.href = "index.html";
+  });
+}
+
 if (loginForm) {
   loginForm.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -45,6 +60,29 @@ if (forgotPassword) {
     );
   });
 }
+
+// Caps On function 
+
+(function addCapsLockWarning() {
+  const passwordInput = document.querySelector('input[name="password"]');
+  if (!passwordInput) return;
+
+  const warning = document.createElement("div");
+  warning.textContent = "Caps Lock is ON";
+  warning.style.display = "none";
+  warning.style.fontSize = "12px";
+  warning.style.marginTop = "6px";
+
+  passwordInput.parentElement.appendChild(warning);
+
+  passwordInput.addEventListener("keyup", (e) => {
+    if (e.getModifierState && e.getModifierState("CapsLock")) {
+      warning.style.display = "block";
+    } else {
+      warning.style.display = "none";
+    }
+  });
+})(); 
 
 
 

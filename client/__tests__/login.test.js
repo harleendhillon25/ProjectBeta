@@ -1,3 +1,4 @@
+/** @jest-environment jsdom */
 describe("login.js", () => {
   beforeEach(() => {
     jest.resetModules();
@@ -22,8 +23,8 @@ describe("login.js", () => {
   });
 
   afterEach(() => {
-    console.error.mockRestore();
-  });
+  if (console.error.mockRestore) console.error.mockRestore();
+});
 
   test("successful login redirects to index.html", async () => {
     fetch.mockResolvedValue({

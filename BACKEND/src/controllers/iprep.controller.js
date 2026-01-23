@@ -3,9 +3,7 @@ const {enrichRecentIPs} = require("../services/detectionService.js")
 
 async function refresh_ip_reputation(req, res) {
     try {
-        const { window_minutes = 60 } = req.body || {}
-
-        const result = await enrichRecentIPs( { windowMinutes: window_minutes })
+        const result = await enrichRecentIPs()
 
         return res.status(200).json({
             success: true,
