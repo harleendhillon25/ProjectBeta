@@ -11,6 +11,7 @@ app.use(logger);
 app.use(cors());
 app.use(express.json());
 
+app.use('/clients', require('./routes/clients.routes'));
 app.use('/logs', require('./routes/ingest.routes'));
 app.use('/alerts', require('./routes/alerts.routes'));
 app.use('/ips', require('./routes/iprep.routes'));

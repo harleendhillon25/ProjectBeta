@@ -1,9 +1,9 @@
-jest.mock('../db/connect.js', () => ({
+jest.mock('../../../src/db/connect.js', () => ({
   query: jest.fn()
 }));
 
-const pool = require('../db/connect.js');
-const { IngestModel, getDistinctIPsInWindow } = require('../models/ingest.model');
+const pool = require('../../../src/db/connect.js');
+const { IngestModel, getDistinctIPsInWindow } = require('../../../src/models/ingest.model');
 
 describe('IngestModel', () => {
   afterEach(() => {
