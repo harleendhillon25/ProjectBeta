@@ -3,7 +3,7 @@ const loginForm = document.getElementById("login-form");
 // LOGIN PAGE → DASHBOARD
 if (loginForm) {
   loginForm.addEventListener("submit", (e) => {
-    e.preventDefault(); // stop real form submit
+    e.preventDefault(); 
     window.location.href = "index.html";
   });
 }
