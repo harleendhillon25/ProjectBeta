@@ -3,7 +3,7 @@ jest.mock('../../../src/db/connect.js', () => ({
 }));
 
 const pool = require('../../../src/db/connect.js');
-const { IngestModel, getDistinctIPsInWindow } = require('../../../src/models/ingest.model');
+const { IngestModel, getDistinctIPs } = require('../../../src/models/ingest.model');
 
 describe('IngestModel', () => {
   afterEach(() => {
@@ -54,7 +54,7 @@ describe('IngestModel', () => {
   });
 });
 
-describe('getDistinctIPsInWindow()', () => {
+describe('getDistinctIPs()', () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
@@ -67,29 +67,13 @@ describe('getDistinctIPsInWindow()', () => {
       ]
     });
 
-    const result = await getDistinctIPsInWindow(30);
+    const result = await getDistinctIPs();
 
     expect(pool.query).toHaveBeenCalledTimes(1);
     expect(pool.query).toHaveBeenCalledWith(
-      expect.stringContaining('SELECT DISTINCT ip_address'),
-      [30]
+      expect.stringContaining('SELECT DISTINCT ip_address')
     );
 
     expect(result).toEqual(['192.168.1.1', '10.0.0.5']);
-  });
-
-  it('should default to 60 minutes if no argument is provided', async () => {
-    pool.query.mockResolvedValueOnce({
-      rows: [{ ip_address: '127.0.0.1' }]
-    });
-
-    const result = await getDistinctIPsInWindow();
-
-    expect(pool.query).toHaveBeenCalledWith(
-      expect.any(String),
-      [60]
-    );
-
-    expect(result).toEqual(['127.0.0.1']);
   });
 });
