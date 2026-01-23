@@ -8,7 +8,7 @@ module.exports = {
     {
       displayName: "frontend",
       testEnvironment: "jsdom",
-      testMatch: ["<rootDir>/client/__tests__/*.test.js"],
+      testMatch: ["<rootDir>/client/__tests__/**/*.test.js"],
       setupFilesAfterEnv: ["<rootDir>/client/__tests__/setup.js"],
       testPathIgnorePatterns: ["<rootDir>/client/__tests__/helpers.js"],
     },
