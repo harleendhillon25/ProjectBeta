@@ -68,17 +68,6 @@ if (forgotPassword) {
   });
 })();
 
-// Temp lock after to many trys of login
-
-
-
-
-
-
-
-
-
-
 
 
 }
