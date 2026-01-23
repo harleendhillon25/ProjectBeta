@@ -3,6 +3,13 @@ const loginForm = document.getElementById("login-form");
 if (loginForm) {
   loginForm.addEventListener("submit", async (e) => {
     e.preventDefault();
+     window.location.href = "index.html";
+  });
+}
+
+if (loginForm) {
+  loginForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
 
     const form = new FormData(e.target);
 
@@ -44,6 +51,7 @@ if (forgotPassword) {
       "Your request has been sent to the administrator.\n\nThey will reset your password and email you shortly."
     );
   });
+}
 
 // Caps On function 
 
@@ -66,11 +74,7 @@ if (forgotPassword) {
       warning.style.display = "none";
     }
   });
-})();
-
-
-
-}
+})(); 
 
 
 
