@@ -31,21 +31,25 @@ class IngestModel {
   }
 }
 
-// MAX: Hey Maisie, I've added this function so I can get a list of unique IP addresses within a certain time frame.
-async function getDistinctIPsInWindow(windowMinutes = 60) {
+// MAX: Hey Maisie, I've added this function so I can get a list of unique IP addresses.
+async function getDistinctIPs() {
   const query = `
     SELECT DISTINCT ip_address
     FROM client_logs
     WHERE ip_address IS NOT NULL
-      AND log_date_time >= NOW() - ($1 || ' minutes')::interval
   `;
-  const values = [windowMinutes];
 
-  const res = await pool.query(query, values);
+  const res = await pool.query(query);
   return res.rows.map(row => row.ip_address);
+}
+
+//Once the refresh is complete I want to flush out the client_log table, cause it's no longer needed
+async function clearAllLogs() {
+  await pool.query("TRUNCATE TABLE client_logs;")
 }
 
 module.exports = {
   IngestModel,
-  getDistinctIPsInWindow
+  getDistinctIPs,
+  clearAllLogs
 };
