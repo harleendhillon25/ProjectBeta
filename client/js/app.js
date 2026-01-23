@@ -16,17 +16,21 @@ if (logoutBtn) {
 }
 
 // SIDEBAR NAVIGATION
-const dashboardLink = document.querySelector(".nav-dashboard");
-const securityLink = document.querySelector(".nav-security");
+let currentPage = window.location.pathname.split("/").pop();
 
-if (dashboardLink) {
-  dashboardLink.addEventListener("click", () => {
-    window.location.href = "index.html";
-  });
+// Handle default route (Dashboard)
+if (currentPage === "" || currentPage === "/") {
+  currentPage = "index.html";
 }
 
-if (securityLink) {
-  securityLink.addEventListener("click", () => {
-    window.location.href = "security.html";
-  });
-}
+document.querySelectorAll(".sidebar a").forEach(link => {
+  const linkPage = link.getAttribute("href");
+
+  if (linkPage === currentPage) {
+    link.classList.add("active");
+  } else {
+    link.classList.remove("active");
+  }
+});
+
+

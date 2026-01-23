@@ -15,10 +15,11 @@
     <img src="assets/images/riskRadorLogo.PNG" alt="RiskRadar Logo" class="logo">
   </div>
 
-  <a class="active">Dashboard</a>
-  <a>Threat & Security</a>
-  <a>Admin Management</a>
+  <a href="index.html" class="nav-link">Dashboard</a>
+  <a href="security.html" class="nav-link">Threat & Security</a>
+  <a href="admin.html" class="nav-link">Admin Management</a>
 </aside>
+
 
 
 
@@ -70,6 +71,34 @@
       <li>Review recent authentication logs for affected accounts</li>
     </ul>
 
+    <!-- AI Security Assistant (Placeholder) -->
+<div class="ai-assistant">
+  <h3>AI Security Assistant</h3>
+  <p class="ai-description">
+    Ask our AI assistant for recommended actions based on this threat.
+  </p>
+
+  <div class="ai-box">
+    <input 
+      type="text" 
+      placeholder="Ask AI e.g. 'How serious is this threat?'" 
+      disabled
+    />
+    <button class="btn btn-ai" disabled>
+      Ask AI
+    </button>
+  </div>
+
+  <div class="ai-response">
+    <strong>AI Response (Preview):</strong>
+    <p>
+      This IP shows patterns consistent with credential stuffing attacks.
+      Blocking the IP and enforcing rate limiting is strongly recommended.
+    </p>
+  </div>
+</div>
+
+
     <div class="actions">
       <button class="btn btn-danger">Block IP Address</button>
       <button class="btn btn-secondary">Learn More</button>
@@ -80,5 +109,6 @@
   </main>
 
   </div>
+  <script src="js/app.js"></script>
 </body>
 </html>
