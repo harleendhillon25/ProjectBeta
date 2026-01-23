@@ -57,3 +57,27 @@ CREATE TABLE clients (
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
+
+-- Create alert_types table
+CREATE TABLE IF NOT EXISTS alert_types (
+  id SERIAL PRIMARY KEY,
+  alert_code VARCHAR(50) UNIQUE NOT NULL,
+  name VARCHAR(100) NOT NULL,
+  description TEXT,
+  severity VARCHAR(20) NOT NULL CHECK (severity IN ('LOW', 'MEDIUM', 'HIGH', 'CRITICAL')),
+  category VARCHAR(50) NOT NULL,
+  recommended_action TEXT,
+  is_active BOOLEAN DEFAULT TRUE,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Insert 4 essential alert types
+INSERT INTO alert_types (alert_code, name, description, severity, category, recommended_action) VALUES
+
+('FAILED_LOGIN_BURST', 'Failed Login Burst', 'Multiple failed login attempts from single IP in short time period', 'HIGH', 'Authentication', 'Block IP address, enable CAPTCHA, review authentication logs'),
+
+('BRUTE_FORCE_ATTACK', 'Brute Force Attack', 'Systematic password guessing attempts detected across multiple accounts', 'CRITICAL', 'Authentication', 'Block IP immediately, enable rate limiting, force password resets'),
+
+('ACCOUNT_TAKEOVER', 'Account Takeover', 'Suspicious account activity indicating potential compromise', 'CRITICAL', 'Authentication', 'Lock account immediately, notify user, force credential reset'),
+
+('BLACKLISTED_IP', 'Blacklisted IP', 'Connection from known malicious IP address (AbuseIPDB score >= 50)', 'HIGH', 'Network', 'Block IP at firewall level, review all recent activity from this IP');
