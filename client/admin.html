@@ -1,11 +1,183 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Management Page</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="assets/style.css" />
+    <title>Admin Management</title>
 </head>
+
 <body>
-    <h1>Admin Management Page Under Construction</h1>
+    <div class="app-layout">
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo-wrapper">
+                <img src="assets/images/riskRadorLogo.PNG" alt="RiskRadar Logo" class="logo" />
+            </div>
+
+            <a href="index.html" class="nav-link">Dashboard</a>
+            <a href="security.html" class="nav-link">Threat &amp; Security</a>
+            <a href="admin.html" class="nav-link">Admin Management</a>
+        </aside>
+
+        <!-- Main content -->
+        <main class="main">
+            <div class="header">
+                <h1>Admin Management</h1>
+                <button type="button" class="logout-btn">Log out</button>
+            </div>
+
+            <div class="container">
+
+                <!-- API Key section -->
+                <h2>RiskRadar API Key</h2>
+                <p class="admin-text">
+                    This key is used to send security events (login attempts, account locks, password resets)
+                    to the RiskRadar logging service.
+                </p>
+
+                <div class="api-box">
+                    <div class="api-row">
+                        <div>
+                            <div class="label">API Key</div>
+                            <div class="value api-value" id="apiKeyDisplay">••••••••••••••••••••••••</div>
+                        </div>
+
+                        <div class="api-actions">
+                            <button class="btn btn-secondary" id="toggleKeyBtn" type="button">Show</button>
+                            <button class="btn btn-secondary" id="copyKeyBtn" type="button">Copy</button>
+                        </div>
+                    </div>
+
+                    <div class="api-note">
+                        Keep this key private. Only authorised administrators should have access to it.
+                    </div>
+                </div>
+
+                <h3>Why do we have an API key container?</h3>
+                <p class="admin-text">
+                    Although the customer receives the API key from us, they still need a safe place to manage it.
+                    This container keeps the key hidden by default, reduces mistakes, and makes it easy for
+                    administrators
+                    to copy the correct key when setting up logging.
+                </p>
+
+                <hr />
+
+                <!-- Manual section -->
+                <h2>Setup Manual (How to Enable Logging)</h2>
+                <p class="admin-text">
+                    Follow these steps to add RiskRadar logging into your project. You add one helper file,
+                    then add one line where important actions happen, logging becomes automatic.
+                </p>
+
+                <h3>What is this code and what does it do?</h3>
+
+                <p class="admin-text">
+                    This code sends important security activity from your system to RiskRadar.
+                </p>
+
+                <p class="admin-text">
+                    When something important happens, such as a login attempt or password reset, the system
+                    automatically sends a short message to RiskRadar.
+                </p>
+
+                <p class="admin-text">
+                    This helps administrators see problems early and keep user accounts safe.
+                    The logging runs quietly in the background and does not affect users.
+                </p>
+
+
+                <h3>Step 1: Create a helper file</h3>
+                <p class="admin-text">
+                    Create a file called <strong>riskradar.js</strong> and paste the code below into it.
+                    Replace <strong>CLIENT_API_KEY</strong> with the API key provided to you (or load it from your
+                    <strong>.env</strong> file).
+                </p>
+
+                <pre class="code-box"><code>const RISK_RADAR_ENDPOINT = 'https://api.riskradar.io/logs';
+const RISK_RADAR_API_KEY = 'CLIENT_API_KEY';
+
+async function logEvent({ eventType, userId, status, ipAddress }) {
+  try {
+    await fetch(RISK_RADAR_ENDPOINT, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': RISK_RADAR_API_KEY
+      },
+      body: JSON.stringify({
+        event_type: eventType,
+        user_id: userId,
+        status,
+        ip_address: ipAddress,
+        log_date_time: new Date().toISOString()
+      })
+    });
+  } catch (err) {
+    console.error('RiskRadar log failed:', err);
+  }
+}
+
+module.exports = { logEvent };</code></pre>
+
+                <h3>Step 2: Add one line where important actions happen</h3>
+                <p class="admin-text">
+                    Below are examples of where to add logging. You only add one line per action.
+                </p>
+
+                <h3>Login Attempt</h3>
+                <pre
+                    class="code-box"><code>logEvent({ eventType: 'login_attempt', userId: email, status: success ? 'success' : 'failed', ipAddress: req.ip });</code></pre>
+                <p class="admin-text"> Logs every time a user tries to sign in and records whether it was successful or
+                    failed.
+                </p>
+
+
+                <h3>Password Reset Required</h3>
+                <pre
+                    class="code-box"><code>logEvent({ eventType: 'password_reset', userId: email, status: 'requested', ipAddress: req.ip });</code></pre>
+                <p class="admin-text">
+                    Logs when a user requests to reset their password.
+                </p>
+
+
+                <h3>Account Locked</h3>
+                <pre
+                    class="code-box"><code>logEvent({ eventType: 'account_lock', userId: user.id, status: 'locked', ipAddress: req.ip });</code></pre>
+                <p class="admin-text">
+                    Logs when an account is locked due to suspicious activity or too many failed attempts.
+                </p>
+
+
+                <h3>Too many requests / rate limit</h3>
+                <pre
+                    class="code-box"><code>logEvent({ eventType: 'rate_limit', userId: 'anonymous', status: 'blocked', ipAddress: req.ip });</code></pre>
+                <p class="admin-text">
+                    Logs when the system blocks a user or device for sending too many requests.
+                </p>
+
+
+                <h3>Account created</h3>
+                <pre
+                    class="code-box"><code>logEvent({ eventType: 'account_created', userId: user.id, status: 'success', ipAddress: req.ip });</code></pre>
+                <p class="admin-text">
+                    Logs when a new user account is successfully created.
+                </p>
+
+
+                <p class="admin-text">
+                    That’s it. Once these lines are added, RiskRadar logs your security events automatically.
+                </p>
+
+            </div>
+        </main>
+    </div>
+
+    <script src="js/index.js"></script>
+    <script src="js/admin.js"></script>
 </body>
+
 </html>
