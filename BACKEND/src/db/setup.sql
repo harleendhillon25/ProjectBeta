@@ -42,8 +42,8 @@ VALUES
 (1, 'LOGIN_ATTEMPT', 'admin',  NOW() - interval '22 minutes', '203.0.113.45', 'FAILURE'),
 
 -- Blacklisted-style IP (known bad)
-(1, 'LOGIN_ATTEMPT', 'unknown', NOW() - interval '18 minutes', '185.199.110.153', 'FAILURE'),
-(1, 'LOGIN_ATTEMPT', 'unknown', NOW() - interval '16 minutes', '185.199.110.153', 'FAILURE'),
+(1, 'LOGIN_ATTEMPT', 'unknown', NOW() - interval '18 minutes', '23.236.169.235', 'FAILURE'),
+(1, 'LOGIN_ATTEMPT', 'unknown', NOW() - interval '16 minutes', '23.236.169.235', 'FAILURE'),
 
 -- Mixed behaviour from VPN / shared IP
 (1, 'LOGIN_ATTEMPT', 'user_10', NOW() - interval '12 minutes', '45.67.89.123', 'FAILURE'),
@@ -90,7 +90,7 @@ CREATE TABLE IF NOT EXISTS alerts (
 -- CREATE INDEX IF NOT EXISTS idx_alerts_ip
 --   ON alerts (ip_address);
 
-CREATE TABLE clients (
+CREATE TABLE IF NOT EXISTS clients (
   id BIGSERIAL PRIMARY KEY,
   name VARCHAR(100) NOT NULL,
   email VARCHAR(150) NOT NULL UNIQUE,
