@@ -1,7 +1,7 @@
 # THIS IS JUST SAMPLE DATA TO STOP IT SAYING THERE IS AN ERROR
 
 
-name: Weather Pipeline CI/CD # This is the name of the github action
+name: Risk_Radar CI/CD # This is the name of the github action
 
 on: # When to trigger
   push:
@@ -33,7 +33,7 @@ jobs:
 
       - name: Install dependencies
         run: npm ci # ci will install the exact version on the package lock
-
+        #This will have to change
       - name: Fetch latest Weather
         env:
           WEATHER_API_KEY: ${{ secrets.WEATHER_API_KEY }} # We want to fetch the weather key, but store it someone secretly
