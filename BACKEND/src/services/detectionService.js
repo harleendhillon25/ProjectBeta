@@ -85,7 +85,7 @@ async function enrichRecentIPs() {
     //Once processed we can clear all the logs
     try {
         await clearAllLogs();
-        console.log("Client logs table cleared after refresh")
+        console.log("Client logs table cleared all logs older than 60 minutes")
     } catch (err) {
         console.error("Failed to clear the client logs:", err.message)
     }

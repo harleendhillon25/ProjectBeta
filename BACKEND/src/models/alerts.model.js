@@ -133,14 +133,19 @@ async function refresh_alerts_from_sources({
 async function get_stored_alerts({ limit = 100 } = {}) {
   const sql = `
     SELECT
-      id,
-      alert_type,
-      ip_address,
-      severity,
-      details,
-      created_at
-    FROM alerts
-    ORDER BY created_at DESC
+      a.id,
+      a.alert_type,
+      a.ip_address,
+      a.severity,
+      a.details,
+      a.created_at,
+      at.name AS alert_type_name,
+      at.description AS alert_description,
+      at.recommended_action,
+      at.category
+    FROM alerts a
+    LEFT JOIN alert_types at ON a.alert_type = at.alert_code
+    ORDER BY a.created_at DESC
     LIMIT $1
   `;
   const res = await pool.query(sql, [limit]);
