@@ -26,10 +26,16 @@
   <!-- Main content -->
   <main class="main">
 
+    <div class="header">
+        <h1>Main Dashboard</h1>
+        <button type="button" class="logout-btn">Log out</button>
+        <button type="button" id="refresh-alerts">Refresh Alerts</button>
+      </div>
+
     <div class="container">
 
     <div class="alert">
-      ⚠️ Alert: Multiple failed login attempts detected from a high-risk IP
+      ⚠️ Loading security data...
     </div>
 
     <h2>IP Security Details</h2>
@@ -37,48 +43,47 @@
     <div class="info-grid">
       <div class="info-box">
         <div class="label">IP Address</div>
-        <div class="value">193.27.12.56</div>
+        <div class="value">--</div>
       </div>
 
       <div class="info-box">
         <div class="label">Severity</div>
         <div class="value">
-          <span class="risk">HIGH RISK</span>
+          <span class="risk">--</span>
         </div>
       </div>
 
       <div class="info-box">
         <div class="label">Location</div>
-        <div class="value">Moscow, Russia</div>
+        <div class="value">--</div>
       </div>
 
       <div class="info-box">
         <div class="label">Threat Type</div>
-        <div class="value">Credential Stuffing</div>
+        <div class="value">--</div>
       </div>
     </div>
 
     <h3>Why this IP was flagged</h3>
-    <p>
-      This IP address has been reported by multiple public security databases and
-      is associated with automated login attempts across multiple websites.
-    </p>
+    <p class="flagged-reason">Loading threat analysis...</p>
 
-    <h3>Recommended Actions</h3>
+    <!-- <h3>Recommended Actions</h3>
     <ul>
       <li>Block the IP address at firewall or application level</li>
       <li>Enable CAPTCHA after repeated failed login attempts</li>
+      <li>Implement rate limiting (max 5 attempts per 15 minutes)</li>
       <li>Review recent authentication logs for affected accounts</li>
-    </ul>
+      <li>Consider enabling multi-factor authentication (MFA) for all users</li>
+    </ul> -->
 
     <!-- AI Security Assistant (Placeholder) -->
 <div class="ai-assistant">
-  <h3>AI Security Assistant</h3>
-  <p class="ai-description">
+  <h3>🤖 AI Security Assistant</h3>
+  <!-- <p class="ai-description">
     Ask our AI assistant for recommended actions based on this threat.
-  </p>
+  </p> -->
 
-  <div class="ai-box">
+  <!-- <div class="ai-box">
     <input 
       type="text" 
       placeholder="Ask AI e.g. 'How serious is this threat?'" 
@@ -87,13 +92,12 @@
     <button class="btn btn-ai" disabled>
       Ask AI
     </button>
-  </div>
+  </div> -->
 
   <div class="ai-response">
-    <strong>AI Response (Preview):</strong>
+    <strong>Recommended actions:</strong>
     <p>
-      This IP shows patterns consistent with credential stuffing attacks.
-      Blocking the IP and enforcing rate limiting is strongly recommended.
+      Loading...
     </p>
   </div>
 </div>
@@ -105,6 +109,6 @@
   </main>
 
   </div>
-  <script src="js/index.js"></script>
+  <script src="js/security.js"></script>
 </body>
 </html>
