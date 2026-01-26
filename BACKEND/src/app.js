@@ -6,7 +6,7 @@ const apiAuth = require("./middleware/api.auth.js")
 const clientAuth = require("./middleware/client.auth.js")
 
 // app.use(apiAuth);
-//app.use(clientAuth);
+// app.use(clientAuth);
 app.use(logger);
 app.use(cors());
 app.use(express.json());

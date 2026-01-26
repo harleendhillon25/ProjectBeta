@@ -72,10 +72,11 @@ async function refreshAlerts() {
   try {
     const res = await fetch("http://localhost:3000/alerts/refresh", {
       method: "POST",
-      // headers: {
+       headers: {
       //   Authorization: `Bearer ${localStorage.getItem("token")}`,
-      //   "Content-Type": "application/json",
-      // },
+        "Content-Type": "application/json",
+        "x-api-key": "test-api-key-123"
+      },
       body: JSON.stringify({ window_minutes: 60, failed_threshold: 3, abuse_threshold: 50 }),
     });
     if (!res.ok) throw new Error("Failed to refresh alerts");
