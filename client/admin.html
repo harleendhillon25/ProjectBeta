@@ -1,10 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 036a3efdf7d7eeee984d175bf51b90d6f6a70249
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -12,38 +8,20 @@
     <title>Admin Management</title>
 </head>
 
-<<<<<<< HEAD
-
 <body>
     <div class="app-layout">
 
-
-=======
-<body>
-    <div class="app-layout">
-
->>>>>>> 036a3efdf7d7eeee984d175bf51b90d6f6a70249
         <!-- Sidebar -->
         <aside class="sidebar">
             <div class="logo-wrapper">
                 <img src="assets/images/riskRadorLogo.PNG" alt="RiskRadar Logo" class="logo" />
             </div>
 
-<<<<<<< HEAD
-
-            <a href="index.html" class="nav-link">Dashboard</a>
-            <a href="security.html" class="nav-link">Threat & Security</a>
-            <a href="admin.html" class="nav-link">Admin Management</a>
-        </aside>
-
-
-=======
             <a href="index.html" class="nav-link">Dashboard</a>
             <a href="security.html" class="nav-link">Threat &amp; Security</a>
             <a href="admin.html" class="nav-link">Admin Management</a>
         </aside>
 
->>>>>>> 036a3efdf7d7eeee984d175bf51b90d6f6a70249
         <!-- Main content -->
         <main class="main">
             <div class="header">
@@ -51,24 +29,15 @@
                 <button type="button" class="logout-btn">Log out</button>
             </div>
 
-<<<<<<< HEAD
-
-            <div class="container">
-=======
             <div class="container">
 
                 <!-- API Key section -->
->>>>>>> 036a3efdf7d7eeee984d175bf51b90d6f6a70249
                 <h2>RiskRadar API Key</h2>
                 <p class="admin-text">
                     This key is used to send security events (login attempts, account locks, password resets)
                     to the RiskRadar logging service.
                 </p>
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 036a3efdf7d7eeee984d175bf51b90d6f6a70249
                 <div class="api-box">
                     <div class="api-row">
                         <div>
@@ -76,104 +45,12 @@
                             <div class="value api-value" id="apiKeyDisplay">••••••••••••••••••••••••</div>
                         </div>
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 036a3efdf7d7eeee984d175bf51b90d6f6a70249
                         <div class="api-actions">
                             <button class="btn btn-secondary" id="toggleKeyBtn" type="button">Show</button>
                             <button class="btn btn-secondary" id="copyKeyBtn" type="button">Copy</button>
                         </div>
                     </div>
 
-<<<<<<< HEAD
-
-                    <div class="api-note">
-                        Keep this key private. Only admins should have access to it.
-                    </div>
-                </div>
-
-
-                <h2>Send Test Log Event</h2>
-                <p class="admin-text">
-                    This simulates an event being sent to RiskRadar (like a login attempt).
-                </p>
-
-
-                <form id="admin-log-form" class="admin-form">
-                    <div class="admin-grid">
-                        <div>
-                            <div class="label">Event Type</div>
-                            <select class="admin-input" name="eventType" required>
-                                <option value="login_attempt">login_attempt</option>
-                                <option value="password_reset">password_reset</option>
-                                <option value="account_lock">account_lock</option>
-                                <option value="rate_limit">rate_limit</option>
-                                <option value="account_created">account_created</option>
-                            </select>
-                        </div>
-
-
-                        <div>
-                            <div class="label">User ID / Email</div>
-                            <input class="admin-input" name="userId" placeholder="e.g. harleenkaur@example.com"
-                                required />
-                        </div>
-
-
-                        <div>
-                            <div class="label">Status</div>
-                            <select class="admin-input" name="status" required>
-                                <option value="success">success</option>
-                                <option value="failed">failed</option>
-                                <option value="requested">requested</option>
-                                <option value="locked">locked</option>
-                                <option value="blocked">blocked</option>
-                            </select>
-                        </div>
-
-
-                        <div>
-                            <div class="label">IP Address</div>
-                            <input class="admin-input" name="ipAddress" placeholder="e.g. 193.27.12.56" required />
-                        </div>
-                    </div>
-
-
-                    <button class="btn btn-ai admin-send" type="submit" id="sendLogBtn">Send Log</button>
-                    <div class="admin-status" id="adminStatus"></div>
-                </form>
-
-
-                <h2>Recent Logged Events (Preview)</h2>
-                <p class="admin-text">
-                    This table is a simple preview. In a real system, this would load from a database.
-                </p>
-
-
-                <table class="admin-table">
-                    <thead>
-                        <tr>
-                            <th>Time</th>
-                            <th>Event</th>
-                            <th>User</th>
-                            <th>Status</th>
-                            <th>IP</th>
-                        </tr>
-                    </thead>
-                    <tbody id="adminLogTable">
-                        <tr>
-                            <td>23/01/2026 14:32</td>
-                            <td>login_attempt</td>
-                            <td>harleenkaur@example.com</td>
-                            <td><span class="tag medium">failed</span></td>
-                            <td>193.27.12.56</td>
-                        </tr>
-                    </tbody>
-                </table>
-
-
-=======
                     <div class="api-note">
                         Keep this key private. Only authorised administrators should have access to it.
                     </div>
@@ -295,23 +172,12 @@ module.exports = { logEvent };</code></pre>
                     That’s it. Once these lines are added, RiskRadar logs your security events automatically.
                 </p>
 
->>>>>>> 036a3efdf7d7eeee984d175bf51b90d6f6a70249
             </div>
         </main>
     </div>
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 036a3efdf7d7eeee984d175bf51b90d6f6a70249
     <script src="js/index.js"></script>
     <script src="js/admin.js"></script>
 </body>
 
-<<<<<<< HEAD
-
 </html>
-
-=======
-</html>
->>>>>>> 036a3efdf7d7eeee984d175bf51b90d6f6a70249

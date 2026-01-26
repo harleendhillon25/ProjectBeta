@@ -640,69 +640,36 @@ body {
   color: #d1d5db;
 }
 
-<<<<<<< HEAD
-.admin-text {
-  color: #6B7280;
-=======
 /* Admin Page */
 
 .admin-text {
   color: #6b7280;
->>>>>>> 036a3efdf7d7eeee984d175bf51b90d6f6a70249
   font-size: 14px;
   margin-top: -6px;
   margin-bottom: 18px;
 }
-<<<<<<< HEAD
-.api-box {
-  background: #F9FAFB;
-  border: 1px solid #E5E7EB;
-=======
 
 .api-box {
   background: #f9fafb;
   border: 1px solid #e5e7eb;
->>>>>>> 036a3efdf7d7eeee984d175bf51b90d6f6a70249
   border-radius: 10px;
   padding: 16px;
   margin-bottom: 26px;
 }
-<<<<<<< HEAD
-=======
-
->>>>>>> 036a3efdf7d7eeee984d175bf51b90d6f6a70249
 .api-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 14px;
 }
-<<<<<<< HEAD
-=======
-
->>>>>>> 036a3efdf7d7eeee984d175bf51b90d6f6a70249
 .api-actions {
   display: flex;
   gap: 10px;
 }
-<<<<<<< HEAD
-=======
-
->>>>>>> 036a3efdf7d7eeee984d175bf51b90d6f6a70249
 .api-value {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
   letter-spacing: 0.4px;
 }
-<<<<<<< HEAD
-.api-note {
-  margin-top: 10px;
-  color: #6B7280;
-  font-size: 13px;
-}
-.admin-form {
-  margin-bottom: 28px;
-}
-=======
 
 .api-note {
   margin-top: 10px;
@@ -714,48 +681,25 @@ body {
   margin-bottom: 28px;
 }
 
->>>>>>> 036a3efdf7d7eeee984d175bf51b90d6f6a70249
 .admin-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 14px;
   margin-bottom: 14px;
 }
-<<<<<<< HEAD
-=======
-
->>>>>>> 036a3efdf7d7eeee984d175bf51b90d6f6a70249
 .admin-input {
   width: 100%;
   padding: 10px 12px;
   border-radius: 8px;
-<<<<<<< HEAD
-  border: 1px solid #E5E7EB;
-  background: #fff;
-  font-size: 14px;
-}
-=======
   border: 1px solid #e5e7eb;
   background: #fff;
   font-size: 14px;
 }
 
->>>>>>> 036a3efdf7d7eeee984d175bf51b90d6f6a70249
 .admin-send {
   opacity: 1;
   cursor: pointer;
 }
-<<<<<<< HEAD
-.admin-status {
-  margin-top: 10px;
-  font-size: 14px;
-  color: #0A4AA6;
-  font-weight: 600;
-}
-.admin-table {
-  margin-top: 10px;
-}
-=======
 
 .admin-status {
   margin-top: 10px;
@@ -780,28 +724,16 @@ body {
 }
 
 
->>>>>>> 036a3efdf7d7eeee984d175bf51b90d6f6a70249
 @media (max-wid: 700px) {
   .admin-grid {
     grid-template-columns: 1fr;
   }
-<<<<<<< HEAD
-=======
-
->>>>>>> 036a3efdf7d7eeee984d175bf51b90d6f6a70249
   .api-row {
     flex-direction: column;
     align-items: flex-start;
   }
-<<<<<<< HEAD
-  .api-actions {
-    width: 100%;
-  }
-}
-=======
 
   .api-actions {
     width: 100%;
   }
 }
->>>>>>> 036a3efdf7d7eeee984d175bf51b90d6f6a70249
