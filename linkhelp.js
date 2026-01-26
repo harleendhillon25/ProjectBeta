@@ -1,6 +1,50 @@
+const loginForm = document.getElementById("login-form");
+
+// LOGIN PAGE → DASHBOARD
+if (loginForm) {
+  loginForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const form = new FormData(e.target);
+
+    try {
+      const response = await fetch("http://localhost:3000/clients/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify({
+          email: form.get("email"),
+          password: form.get("password")
+        })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Login failed");
+      }
+
+      // Store JWT for authenticated requests
+      localStorage.setItem("token", data.token);
+
+      // Redirect on success
+      window.location.assign("index.html");
+
+    } catch (err) {
+      console.error("Login error:", err.message);
+      alert("Login failed. Please check your credentials.");
+    }
+  });
+}
+
+// INDEX.JS
+
 document.addEventListener("DOMContentLoaded", () => {
 
-    const token = localStorage.getItem("token");
+  // 🔐 AUTH GUARD
+  const token = localStorage.getItem("token");
   if (!token) {
     window.location.assign("login.html");
     return;
@@ -11,25 +55,19 @@ document.addEventListener("DOMContentLoaded", () => {
   if (logoutBtn) {
     logoutBtn.addEventListener("click", () => {
       localStorage.removeItem("token");
-      window.location.href = "login.html";
+      window.location.assign("login.html");
     });
   }
 
   // SIDEBAR ACTIVE LINK
   let currentPage = window.location.pathname.split("/").pop();
-
   if (currentPage === "" || currentPage === "/") {
     currentPage = "index.html";
   }
 
   document.querySelectorAll(".sidebar a").forEach(link => {
     const linkPage = link.getAttribute("href");
-
-    if (linkPage === currentPage) {
-      link.classList.add("active");
-    } else {
-      link.classList.remove("active");
-    }
+    link.classList.toggle("active", linkPage === currentPage);
   });
 
   // LOAD ALERTS
@@ -113,3 +151,8 @@ function renderAlertsTable(alerts) {
     tbody.appendChild(row);
   });
 }
+
+
+<tbody id="alerts-table-body">
+  <!-- Alerts injected here -->
+</tbody>

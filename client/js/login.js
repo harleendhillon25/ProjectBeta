@@ -1,23 +1,11 @@
 const loginForm = document.getElementById("login-form");
 
 // LOGIN PAGE → DASHBOARD
+
 if (loginForm) {
-  loginForm.addEventListener("submit", (e) => {
-    e.preventDefault(); 
+  loginForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
     window.location.href = "index.html";
-  });
-}
-
-if (loginForm) {
-  loginForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
-     window.location.href = "index.html";
-  });
-}
-
-if (loginForm) {
-  loginForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
 
     const form = new FormData(e.target);
 
@@ -33,14 +21,16 @@ if (loginForm) {
       })
     };
 
-    const response = await fetch("remeber to put the link in", options);
+    const response = await fetch("http://localhost:3000/clients/login", options);
     await response.json();
 
     if (response.status === 200) {
       window.__REDIRECT_TO__ = "index.html";
       try {
+        localStorage.setItem("token", data.token);
         window.location.assign("index.html");
       } catch (err) {
+        console.error("Login error:", err.message);
       }
 
     } else {
