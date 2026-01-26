@@ -1,7 +1,7 @@
 # THIS IS JUST SAMPLE DATA TO STOP IT SAYING THERE IS AN ERROR
 
 
-name: Weather Pipeline CI/CD # This is the name of the github action
+name: Risk_Radar CI/CD # This is the name of the github action
 
 on: # When to trigger
   push:
@@ -10,10 +10,10 @@ on: # When to trigger
   workflow_dispatch:
 
 permissions:
-  contents: write # This allows it to overwrite our files, which we need it to do with the .csv file and the .json
+  contents: read # We only need to read what the repo provides
 
 jobs:
-  test_and_fetch:
+  refresh_ip_reputation:
     runs-on: ubuntu-latest #This is the runner
 
     steps:
@@ -33,20 +33,10 @@ jobs:
 
       - name: Install dependencies
         run: npm ci # ci will install the exact version on the package lock
-
-      - name: Fetch latest Weather
+        
+      - name: Refresh IP reputation via AbuseIPDB
         env:
-          WEATHER_API_KEY: ${{ secrets.WEATHER_API_KEY }} # We want to fetch the weather key, but store it someone secretly
-          CITY: ${{ secrets.CITY }}
-        run: node fetchWeather.js
-
-      - name: Commit weather data if changed
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/weather.json data/weather_log.csv || true
-          git commit -m "ci: update weather data" || echo "No changes to commit"
-          git push || echo "Push failed or no changes"
-
-      - name: Trigger Render Deploy
-        run: curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK }} #This will push a deploy to Render, and will update the existing deployment there
+          ABUSE_KEY: ${{ secrets.ABUSE_KEY }}
+          DB_URL: ${{ secrets.DB_URL }}
+        
+        run: kk
