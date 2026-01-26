@@ -1,10 +1,18 @@
 document.addEventListener("DOMContentLoaded", () => {
 
+<<<<<<< HEAD
   //   const token = localStorage.getItem("token");
   // if (!token) {
   //   window.location.assign("login.html");
   //   return;
   // }
+=======
+   /* const token = localStorage.getItem("token");
+  if (!token) {
+    window.location.assign("login.html");
+    return;
+  } */
+>>>>>>> 036a3efdf7d7eeee984d175bf51b90d6f6a70249
 
   // LOGOUT → LOGIN PAGE
   const logoutBtn = document.querySelector(".logout-btn");
@@ -42,6 +50,96 @@ document.addEventListener("DOMContentLoaded", () => {
     await refreshIPReputation();
   });
 });
+
+// ----------------TIME HELPERS ----------------
+function minutesAgo(mins) {
+  return Date.now() - mins * 60 * 1000;
+}
+
+function isToday(dateStr) {
+  const d = new Date(dateStr);
+  const today = new Date();
+  return d.toDateString() === today.toDateString();
+}
+
+// RISK BANNER METRICS
+
+function computeRiskLevel(alerts) {
+  const todayAlerts = alerts.filter(a => isToday(a.created_at));
+
+  if (todayAlerts.some(a => a.severity === "HIGH")) return "HIGH";
+  if (todayAlerts.some(a => a.severity === "MEDIUM")) return "MODERATE";
+  return "LOW";
+}
+
+async function loadRiskBanner() {
+  const res = await authFetch("/alerts");
+  const alerts = res.data || [];
+
+  const level = computeRiskLevel(alerts);
+  const banner = document.getElementById("risk-banner");
+
+  banner.textContent =
+    level === "HIGH"
+      ? "High Risk Detected Today"
+      : level === "MODERATE"
+      ? "Moderate Risk Detected Today"
+      : "Low Risk Detected Today";
+
+  banner.className = `risk-banner ${level.toLowerCase()}`;
+}
+
+
+// LOGIN SUCCESS/FAILURE METRICS
+
+async function loadLoginOutcomes() {
+  const data = await authFetch("/logs"); // expects array of logs
+  const logs = data.data || data;
+
+  const cutoff = minutesAgo(60);
+
+  const recent = logs.filter(l =>
+    new Date(l.log_date_time).getTime() >= cutoff
+  );
+
+  const success = recent.filter(l => l.status === "SUCCESS").length;
+  const failed = recent.filter(l => l.status === "FAILURE").length;
+  const total = success + failed;
+
+  const rate = total === 0 ? 0 : Math.round((success / total) * 100);
+
+  document.getElementById("login-success-rate").textContent = `${rate}%`;
+  document.getElementById("login-success-count").textContent = success;
+  document.getElementById("login-failed-count").textContent = failed;
+}
+// UNIQUE IP METRICS
+
+async function loadUniqueIPs() {
+  const data = await authFetch("/logs");
+  const logs = data.data || data;
+
+  const todayIPs = new Set(
+    logs
+      .filter(l => isToday(l.log_date_time))
+      .map(l => l.ip_address)
+  );
+
+  document.getElementById("unique-ip-count").textContent = todayIPs.size;
+}
+
+// BLACKLISTED IP METRICS
+
+async function loadBlacklistedIPs() {
+  const res = await authFetch("/alerts");
+  const alerts = res.data || [];
+
+  const count = alerts.filter(a =>
+    a.alert_type === "BLACKLISTED_IP" &&
+    isToday(a.created_at)
+  ).length;
+
+  document.getElementById("blacklisted-ip-count").textContent = count;
+}
 
 // ---------------- ALERTS ----------------
 async function loadAlerts() {

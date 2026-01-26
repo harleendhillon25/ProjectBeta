@@ -45,7 +45,7 @@ async function getDistinctIPs() {
 
 //Once the refresh is complete I want to flush out the client_log table, cause it's no longer needed
 async function clearAllLogs() {
-  await pool.query("TRUNCATE TABLE client_logs;")
+  await pool.query("DELETE FROM client_logs WHERE log_date_time < NOW() - INTERVAL '60 minutes';")
 }
 
 module.exports = {

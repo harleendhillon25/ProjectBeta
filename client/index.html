@@ -36,8 +36,8 @@
       </div>
 
       <!-- Risk banner -->
-      <div class="risk-banner">
-        Moderate Risk Detected Today
+     <div class="risk-banner" id="risk-banner">
+      --
       </div>
 
       <!-- Metrics -->
@@ -50,14 +50,14 @@
           <div class="login-outcomes">
             <div class="donut-placeholder small">
               <div class="donut-center">
-                <strong>76%</strong>
+                <strong id="login-success-rate">--%</strong>
                 <span>Successful</span>
               </div>
             </div>
 
             <div class="outcome-legend">
-              <p><span class="dot success"></span> 137 Success</p>
-              <p><span class="dot failed"></span> 43 Failed</p>
+              <p><span class="dot success"></span> <span id="login-success-count">0</span> Success</p>
+              <p><span class="dot failed"></span> <span id="login-failed-count">0</span> Failed</p>
             </div>
           </div>
         </div>
@@ -65,13 +65,13 @@
         <!-- Unique IPs -->
         <div class="metric-card">
           <h3>Unique IPs</h3>
-          <p>129</p>
+          <p id="unique-ip-count">--</p>
         </div>
 
         <!-- Blacklisted IPs -->
         <div class="metric-card">
           <h3>Blacklisted IPs</h3>
-          <p>7</p>
+          <p id="blacklisted-ip-count">--</p>
         </div>
 
       </section>
