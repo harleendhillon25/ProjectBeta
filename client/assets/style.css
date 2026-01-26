@@ -723,6 +723,36 @@ body {
   margin-bottom: 18px;
 }
 
+.refresh-btn {
+  background: #0a4aa6;
+  color: #ffffff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: bold;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    transform 0.08s ease,
+    box-shadow 0.2s ease;
+}
+
+.refresh-btn:hover {
+  background: #083c86;
+  box-shadow: 0 4px 10px rgba(10, 74, 166, 0.25);
+}
+
+.refresh-btn:active {
+  transform: translateY(1px);
+}
+
+.header-actions {
+  display: flex;
+  gap: 10px;
+}
+
+
 
 @media (max-wid: 700px) {
   .admin-grid {
