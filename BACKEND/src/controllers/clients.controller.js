@@ -15,6 +15,8 @@ const clientModel = require('../models/clients.model.js');
   }
 
   async function login(req, res) {
+    console.log('JWT_SECRET exists:', !!process.env.JWT_SECRET);  // ← Add this
+    console.log('DATABASE_URL exists:', !!process.env.DATABASE_URL);  // ← Add this
     const { email, password } = req.body;
     if (!email || !password) return res.status(400).json({ error: 'Missing fields' });
 

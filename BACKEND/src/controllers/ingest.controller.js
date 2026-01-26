@@ -1,8 +1,9 @@
+const pool = require('../db/connect.js');
 const { IngestModel } = require('../models/ingest.model.js');
 
 async function ingestLog(req, res) {
   try {
-    const clientId = req.clientId; // from auth middleware
+    const clientId = req.clientId || 1; // from auth middleware
     const { eventType, userId, logDateTime, ipAddress, status } = req.body;
 
     // Validation
@@ -31,4 +32,20 @@ async function ingestLog(req, res) {
   }
 }
 
-module.exports = { ingestLog };
+async function getLogs(req, res) {
+  try {
+    const result = await pool.query(`
+      SELECT *
+      FROM client_logs
+      ORDER BY log_date_time DESC
+      LIMIT 500
+    `);
+
+    res.json({ data: result.rows });
+  } catch (err) {
+    console.error("Error fetching logs:", err);
+    res.status(500).json({ error: "Server error" });
+  }
+}
+
+module.exports = { ingestLog, getLogs };

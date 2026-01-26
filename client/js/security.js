@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // ---------------- LOAD SECURITY DETAILS ----------------
 async function loadSecurityDetails() {
   try {
-    const res = await fetch("http://localhost:3000/api/alerts?limit=20", {
+    const res = await fetch("http://localhost:3000/alerts?limit=20", {
       headers: { 
         Authorization: `Bearer ${localStorage.getItem("token")}`,
         "Content-Type": "application/json"

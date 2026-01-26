@@ -33,15 +33,58 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // LOAD ALERTS
-  loadAlerts();
+ 
+// ---------------- ALERTS ----------------
+//----- this is the original loadAlerts function with token -----
+// async function loadAlerts() {
+//   try {
+//     const res = await fetch("http://localhost:3000/alerts", 
+//       {
+//       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+//     });
+//     if (!res.ok) throw new Error("Failed to load alerts");
 
-  // REFRESH ALERTS BUTTON
-  const refreshBtn = document.getElementById("refresh-alerts");
-  refreshBtn?.addEventListener("click", async () => {
-    await refreshAlerts();
-    await refreshIPReputation();
-  });
-});
+//     const json = await res.json();
+//     renderAlertsTable(json.data || []);
+//   } catch (err) {
+//     console.error("Alerts load error:", err);
+//   }
+// }
+
+// load alerts without token for demo purposes
+
+
+// loadAlerts();
+
+async function loadAlerts() {
+  try {
+    const res = await fetch("http://localhost:3000/alerts");
+    if (!res.ok) throw new Error("Failed to load alerts");
+
+    const json = await res.json();
+    renderAlertsTable(json.data || []);
+  } catch (err) {
+    console.error("Alerts load error:", err);
+  }
+}
+
+async function refreshAlerts() {
+  try {
+    const res = await fetch("http://localhost:3000/alerts/refresh", {
+      method: "POST",
+      // headers: {
+      //   Authorization: `Bearer ${localStorage.getItem("token")}`,
+      //   "Content-Type": "application/json",
+      // },
+      body: JSON.stringify({ window_minutes: 60, failed_threshold: 3, abuse_threshold: 50 }),
+    });
+    if (!res.ok) throw new Error("Failed to refresh alerts");
+    await loadAlerts();
+  } catch (err) {
+    console.error("Refresh alerts error:", err);
+  }
+}
+ 
 
 // ----------------TIME HELPERS ----------------
 function minutesAgo(mins) {
@@ -65,8 +108,13 @@ function computeRiskLevel(alerts) {
 }
 
 async function loadRiskBanner() {
-  const res = await authFetch("/alerts");
-  const alerts = res.data || [];
+  // const data = await fetch("http://localhost:3000/alerts");
+  // const json = await data.json();
+  // const alerts = json.data || [];
+
+  const res = await fetch("http://localhost:3000/alerts");
+  const json = await res.json(); //works with the mock data we provided
+  const alerts = json.data || [];
 
   const level = computeRiskLevel(alerts);
   const banner = document.getElementById("risk-banner");
@@ -85,8 +133,13 @@ async function loadRiskBanner() {
 // LOGIN SUCCESS/FAILURE METRICS
 
 async function loadLoginOutcomes() {
-  const data = await authFetch("/logs"); // expects array of logs
-  const logs = data.data || data;
+  // const data = await fetch("http://localhost:3000/logs"); // expects array of logs
+  // const json = await data.json();
+  // const logs = json.data || [];
+
+  const res = await fetch("http://localhost:3000/logs");
+  const json = await res.json(); //works with the mock data we provided
+  const logs = json.data || [];
 
   const cutoff = minutesAgo(60);
 
@@ -107,8 +160,13 @@ async function loadLoginOutcomes() {
 // UNIQUE IP METRICS
 
 async function loadUniqueIPs() {
-  const data = await authFetch("/logs");
-  const logs = data.data || data;
+  // const data = await fetch("http://localhost:3000/logs");
+  // const json = await data.json();
+  // const logs = json.data || [];
+
+    const res = await fetch("http://localhost:3000/logs");
+    const json = await res.json(); //works with the mock data we provided
+    const logs = json.data || [];
 
   const todayIPs = new Set(
     logs
@@ -122,8 +180,14 @@ async function loadUniqueIPs() {
 // BLACKLISTED IP METRICS
 
 async function loadBlacklistedIPs() {
-  const res = await authFetch("/alerts");
-  const alerts = res.data || [];
+  // const data = await fetch("http://localhost:3000/alerts");
+  // const json = await data.json();
+  // const alerts = json.data || [];
+
+  const res = await fetch("http://localhost:3000/alerts");
+  const json = await res.json(); //works with the mock data we provided
+  const alerts = json.data || [];
+
 
   const count = alerts.filter(a =>
     a.alert_type === "BLACKLISTED_IP" &&
@@ -133,44 +197,13 @@ async function loadBlacklistedIPs() {
   document.getElementById("blacklisted-ip-count").textContent = count;
 }
 
-// ---------------- ALERTS ----------------
-async function loadAlerts() {
-  try {
-    const res = await fetch("http://localhost:3000/alerts", {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-    });
-    if (!res.ok) throw new Error("Failed to load alerts");
-
-    const json = await res.json();
-    renderAlertsTable(json.data || []);
-  } catch (err) {
-    console.error("Alerts load error:", err);
-  }
-}
-
-async function refreshAlerts() {
-  try {
-    const res = await fetch("http://localhost:3000/alerts/refresh", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ window_minutes: 60, failed_threshold: 3, abuse_threshold: 50 }),
-    });
-    if (!res.ok) throw new Error("Failed to refresh alerts");
-    await loadAlerts();
-  } catch (err) {
-    console.error("Refresh alerts error:", err);
-  }
-}
 
 // ---------------- IP REPUTATION ----------------
 async function refreshIPReputation() {
   try {
     const res = await fetch("http://localhost:3000/ips/refresh", {
       method: "POST",
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      // headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
     if (!res.ok) throw new Error("Failed to refresh IP reputation");
     console.log("IP reputation refreshed");
@@ -203,3 +236,26 @@ function renderAlertsTable(alerts) {
     tbody.appendChild(row);
   });
 }
+
+// LOAD METRICS
+ async function loadMetrics() {
+  await loadAlerts();           // fills the table
+  await loadRiskBanner();       // updates risk banner
+  await loadLoginOutcomes();    // updates login outcomes
+  await loadUniqueIPs();        // updates unique IPs
+  await loadBlacklistedIPs();   // updates blacklisted IPs
+}
+
+
+  loadMetrics();
+
+   // REFRESH ALERTS BUTTON
+  const refreshBtn = document.getElementById("refresh-alerts");
+  refreshBtn?.addEventListener("click", async () => {
+    await refreshAlerts();
+    await refreshIPReputation();
+    await loadMetrics(); // reload all metrics after refresh
+  });
+});
+
+
