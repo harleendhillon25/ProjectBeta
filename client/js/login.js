@@ -21,7 +21,8 @@ if (loginForm) {
       })
     };
 
-    const response = await fetch("http://localhost:3000/clients/login", options);
+    // ⬇️ ONLY CHANGE: use relative path instead of localhost
+    const response = await fetch("/clients/login", options);
     await response.json();
 
     if (response.status === 200) {
@@ -72,9 +73,4 @@ if (forgotPassword) {
       warning.style.display = "none";
     }
   });
-})(); 
-
-
-
-
-
+})();
