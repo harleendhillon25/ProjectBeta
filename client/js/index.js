@@ -582,6 +582,19 @@ async function loadLoginActivityChart(hoursBack = 24) {
     const hours = parseInt(e.target.value);
     loadLoginActivityChart(hours);
   });
+
+module.exports = {
+  loadAlerts,
+  refreshAlerts,
+  minutesAgo,
+  isToday,
+  computeRiskLevel,
+  loadRiskBanner,
+  loadLoginOutcomes,
+  loadUniqueIPs,
+  loadBlacklistedIPs,
+  refreshIPReputation,
+  renderAlertsTable,
+  loadLoginActivityChart
+}
 });
-
-
