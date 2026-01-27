@@ -752,6 +752,67 @@ body {
   gap: 10px;
 }
 
+.clickable-row {
+  cursor: pointer;
+}
+
+.clickable-row:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+.back-btn {
+  background: #5a9de0;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.back-btn:hover {
+  background: #3f82c9;
+}
+
+.access-warning {
+  max-width: 500px;
+  margin: 80px auto;
+  padding: 32px;
+  border-radius: 8px;
+  background: #f8fafc;
+  text-align: center;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
+
+.access-warning h2 {
+  margin-bottom: 8px;
+  color: #0f172a;
+}
+
+.access-warning p {
+  color: #475569;
+  margin-bottom: 20px;
+}
+
+.access-warning button {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.access-warning button:hover {
+  background: #1e40af;
+}
+
+.hidden {
+  display: none;
+}
+
 
 
 @media (max-wid: 700px) {
