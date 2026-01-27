@@ -1,26 +1,23 @@
-// refresh_ip_reputation.controller.spec.js
-const mockSend = jest.fn();
-const mockJson = jest.fn();
-const mockEnd = jest.fn();
-
-const mockStatus = jest.fn(() => ({
-  send: mockSend,
-  json: mockJson,
-  end: mockEnd,
-}));
-
-const mockRes = { status: mockStatus };
-
-// Mock the detectionService so the controller gets a mocked enrichRecentIPs
-jest.mock("../../../src/services/detectionService", () => ({
+jest.mock("../../../src/services/detectionService.js", () => ({
   enrichRecentIPs: jest.fn(),
 }));
 
-const { enrichRecentIPs } = require("../../../src/services/detectionService");
-const { refresh_ip_reputation } = require("../../../src/controllers/iprep.controller"); 
+const { enrichRecentIPs } = require("../../../src/services/detectionService.js");
+const pool = require("../../../src/db/connect.js");
+const {
+  refresh_ip_reputation,
+  getIpReputation,
+} = require("../../../src/controllers/iprep.controller.js");
 
+// Helper to create a mock Express res object
+function makeRes() {
+  return {
+    status: jest.fn().mockReturnThis(),
+    json: jest.fn(),
+  };
+}
 
-describe("refresh_ip_reputation controller", () => {
+describe("iprep.controller", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -29,60 +26,110 @@ describe("refresh_ip_reputation controller", () => {
     jest.resetAllMocks();
   });
 
-  it("returns 200 with success message and data when enrichRecentIPs succeeds", async () => {
-    // Arrange
-    const mockResult = [
-      { ip_address: "192.168.0.1", abuse_confidence: 10 },
-      { ip_address: "10.0.0.1", abuse_confidence: 90 },
-    ];
+  // refresh_IP_reputation
+  describe("refresh_ip_reputation", () => {
+    test("200: calls enrichRecentIPs and returns success payload with count and data", async () => {
+      // Arrange
+      const req = {}; // no body needed
+      const res = makeRes();
 
-    enrichRecentIPs.mockResolvedValueOnce(mockResult);
+      const fakeResult = [
+        { ip_address: "10.0.0.1", abuse_confidence: 90 },
+        { ip_address: "10.0.0.2", abuse_confidence: 60 },
+      ];
 
-    const mockReq = {};
+      enrichRecentIPs.mockResolvedValueOnce(fakeResult);
 
-    // Act
-    await refresh_ip_reputation(mockReq, mockRes);
+      // Act
+      await refresh_ip_reputation(req, res);
 
-    // Assert
-    expect(enrichRecentIPs).toHaveBeenCalledTimes(1);
-    expect(mockStatus).toHaveBeenCalledWith(200);
+      // Assert
+      expect(enrichRecentIPs).toHaveBeenCalledTimes(1);
 
-    expect(mockJson).toHaveBeenCalledWith({
-      success: true,
-      message: "IP reputation has been sucessfully refreshed",
-      count: mockResult.length,
-      data: mockResult,
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.json).toHaveBeenCalledWith({
+        success: true,
+        // keep the original spelling from the controller:
+        message: "IP reputation has been sucessfully refreshed",
+        count: fakeResult.length,
+        data: fakeResult,
+      });
+    });
+
+    test("500: when enrichRecentIPs throws, returns error payload", async () => {
+      // Arrange
+      const req = {};
+      const res = makeRes();
+
+      const err = new Error("Abuse API failure");
+      enrichRecentIPs.mockRejectedValueOnce(err);
+
+      // Act
+      await refresh_ip_reputation(req, res);
+
+      // Assert
+      expect(enrichRecentIPs).toHaveBeenCalledTimes(1);
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({
+        success: false,
+        message: "Failed to refresh the IP reputation",
+        error: "Abuse API failure",
+      });
     });
   });
 
-  it("returns 500 with error message when enrichRecentIPs throws", async () => {
-    // Arrange
-    const error = new Error("DB exploded");
-    enrichRecentIPs.mockRejectedValueOnce(error);
+  // getIPReputation
 
-    const mockReq = {};
+  describe("getIpReputation", () => {
+    test("200: returns rows from ip_reputation in data field", async () => {
+      // Arrange
+      const req = {};
+      const res = makeRes();
 
-    // Optional: silence console.error in test output
-    const consoleSpy = jest
-      .spyOn(console, "error")
-      .mockImplementation(() => {});
+      const fakeRows = [
+        {
+          ip_address: "10.0.0.1",
+          abuse_confidence: 90,
+          usage_type: "Data Center",
+          country_name: "UK",
+          total_reports: 50,
+          last_reported_at: "2026-01-25T10:00:00Z",
+          checked_at: "2026-01-26T10:00:00Z",
+        },
+      ];
 
-    // Act
-    await refresh_ip_reputation(mockReq, mockRes);
+      jest.spyOn(pool, "query").mockResolvedValueOnce({ rows: fakeRows });
 
-    // Assert
-    expect(enrichRecentIPs).toHaveBeenCalledTimes(1);
-    expect(mockStatus).toHaveBeenCalledWith(500);
+      // Act
+      await getIpReputation(req, res);
 
-    expect(mockJson).toHaveBeenCalledWith({
-      success: false,
-      message: "Failed to refresh the IP reputation",
-      error: error.message,
+      // Assert
+      expect(pool.query).toHaveBeenCalledTimes(1);
+      expect(pool.query).toHaveBeenCalledWith(
+        expect.stringContaining("FROM ip_reputation")
+      );
+
+      expect(res.json).toHaveBeenCalledWith({ data: fakeRows });
     });
 
-    // Check that we logged the error (optional but nice)
-    expect(consoleSpy).toHaveBeenCalled();
+    test("500: when db query fails, returns error payload", async () => {
+      // Arrange
+      const req = {};
+      const res = makeRes();
 
-    consoleSpy.mockRestore();
+      jest
+        .spyOn(pool, "query")
+        .mockRejectedValueOnce(new Error("DB failure"));
+
+      // Act
+      await getIpReputation(req, res);
+
+      // Assert
+      expect(pool.query).toHaveBeenCalledTimes(1);
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({
+        error: "Failed to fetch IP reputation data",
+      });
+    });
   });
 });
