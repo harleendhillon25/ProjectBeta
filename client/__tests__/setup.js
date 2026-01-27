@@ -1,4 +1,5 @@
-// client/__tests__/setup.js
+
+require("whatwg-fetch");
 const { TextEncoder, TextDecoder } = require("util");
 
 Object.assign(global, { TextEncoder, TextDecoder });
