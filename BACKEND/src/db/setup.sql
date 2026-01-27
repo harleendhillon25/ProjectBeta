@@ -1,4 +1,5 @@
-
+DROP TABLE IF EXISTS client_logs CASCADE;
+DROP TABLE IF EXISTS alert_types CASCADE;
 
 CREATE TABLE IF NOT EXISTS client_logs (
   id BIGSERIAL PRIMARY KEY,
@@ -21,37 +22,46 @@ INSERT INTO client_logs (
   status
 )
 VALUES
--- Normal successful user activity
+-- SUCCESSFUL LOGINS (mix of normal and suspicious IPs)
 (1, 'LOGIN_ATTEMPT', 'user_1',  NOW() - interval '58 minutes', '192.168.1.10', 'SUCCESS'),
 (1, 'LOGIN_ATTEMPT', 'user_2',  NOW() - interval '55 minutes', '192.168.1.11', 'SUCCESS'),
 (1, 'LOGIN_ATTEMPT', 'user_3',  NOW() - interval '52 minutes', '192.168.1.12', 'SUCCESS'),
-(1, 'LOGIN_ATTEMPT', 'user_4',  NOW() - interval '49 minutes', '192.168.1.13', 'SUCCESS'),
+(1, 'LOGIN_ATTEMPT', 'user_4',  NOW() - interval '49 minutes', '144.2.125.115', 'SUCCESS'),
 (1, 'LOGIN_ATTEMPT', 'user_5',  NOW() - interval '46 minutes', '192.168.1.14', 'SUCCESS'),
-
--- Normal occasional failures
-(1, 'LOGIN_ATTEMPT', 'user_6',  NOW() - interval '43 minutes', '192.168.1.15', 'FAILURE'),
-(1, 'LOGIN_ATTEMPT', 'user_7',  NOW() - interval '40 minutes', '192.168.1.16', 'SUCCESS'),
-(1, 'LOGIN_ATTEMPT', 'user_8',  NOW() - interval '38 minutes', '192.168.1.17', 'FAILURE'),
+(1, 'LOGIN_ATTEMPT', 'user_6',  NOW() - interval '43 minutes', '192.168.1.15', 'SUCCESS'),
+(1, 'LOGIN_ATTEMPT', 'user_7',  NOW() - interval '40 minutes', '23.180.120.131', 'SUCCESS'),
+(1, 'LOGIN_ATTEMPT', 'user_8',  NOW() - interval '38 minutes', '192.168.1.17', 'SUCCESS'),
 (1, 'LOGIN_ATTEMPT', 'user_9',  NOW() - interval '36 minutes', '192.168.1.18', 'SUCCESS'),
+(1, 'LOGIN_ATTEMPT', 'user_10', NOW() - interval '34 minutes', '192.168.1.19', 'SUCCESS'),
+(1, 'LOGIN_ATTEMPT', 'user_11', NOW() - interval '32 minutes', '96.248.32.65', 'SUCCESS'),
+(1, 'LOGIN_ATTEMPT', 'user_12', NOW() - interval '30 minutes', '192.168.1.21', 'SUCCESS'),
+(1, 'LOGIN_ATTEMPT', 'user_13', NOW() - interval '28 minutes', '192.168.1.22', 'SUCCESS'),
+(1, 'LOGIN_ATTEMPT', 'user_14', NOW() - interval '26 minutes', '23.132.164.238', 'SUCCESS'),
+(1, 'LOGIN_ATTEMPT', 'user_15', NOW() - interval '24 minutes', '192.168.1.24', 'SUCCESS'),
+(1, 'LOGIN_ATTEMPT', 'user_16', NOW() - interval '22 minutes', '192.168.1.25', 'SUCCESS'),
+(1, 'LOGIN_ATTEMPT', 'user_17', NOW() - interval '20 minutes', '115.96.204.73', 'SUCCESS'),
 
--- Suspicious burst from same IP (brute-force style)
-(1, 'LOGIN_ATTEMPT', 'admin',  NOW() - interval '30 minutes', '203.0.113.45', 'FAILURE'),
-(1, 'LOGIN_ATTEMPT', 'admin',  NOW() - interval '28 minutes', '203.0.113.45', 'FAILURE'),
-(1, 'LOGIN_ATTEMPT', 'admin',  NOW() - interval '26 minutes', '203.0.113.45', 'FAILURE'),
-(1, 'LOGIN_ATTEMPT', 'admin',  NOW() - interval '24 minutes', '203.0.113.45', 'FAILURE'),
-(1, 'LOGIN_ATTEMPT', 'admin',  NOW() - interval '22 minutes', '203.0.113.45', 'FAILURE'),
-
--- Blacklisted-style IP (known bad)
-(1, 'LOGIN_ATTEMPT', 'unknown', NOW() - interval '18 minutes', '23.236.169.235', 'FAILURE'),
-(1, 'LOGIN_ATTEMPT', 'unknown', NOW() - interval '16 minutes', '23.236.169.235', 'FAILURE'),
-
--- Mixed behaviour from VPN / shared IP
-(1, 'LOGIN_ATTEMPT', 'user_10', NOW() - interval '12 minutes', '45.67.89.123', 'FAILURE'),
-(1, 'LOGIN_ATTEMPT', 'user_10', NOW() - interval '10 minutes', '45.67.89.123', 'SUCCESS'),
-(1, 'LOGIN_ATTEMPT', 'user_11', NOW() - interval '6 minutes',  '45.67.89.123', 'SUCCESS'),
-
--- Recent clean activity
-(1, 'LOGIN_ATTEMPT', 'user_12', NOW() - interval '3 minutes',  '192.168.1.19', 'SUCCESS');
+-- FAILED LOGINS (concentrated on suspicious IPs)
+(1, 'LOGIN_ATTEMPT', 'admin',   NOW() - interval '57 minutes', '144.2.125.115', 'FAILURE'),
+(1, 'LOGIN_ATTEMPT', 'admin',   NOW() - interval '56 minutes', '144.2.125.115', 'FAILURE'),
+(1, 'LOGIN_ATTEMPT', 'root',    NOW() - interval '55 minutes', '144.2.125.115', 'FAILURE'),
+(1, 'LOGIN_ATTEMPT', 'admin',   NOW() - interval '54 minutes', '144.2.125.115', 'FAILURE'),
+(1, 'LOGIN_ATTEMPT', 'user_21', NOW() - interval '50 minutes', '192.168.1.30', 'FAILURE'),
+(1, 'LOGIN_ATTEMPT', 'admin',   NOW() - interval '48 minutes', '23.180.120.131', 'FAILURE'),
+(1, 'LOGIN_ATTEMPT', 'root',    NOW() - interval '47 minutes', '23.180.120.131', 'FAILURE'),
+(1, 'LOGIN_ATTEMPT', 'admin',   NOW() - interval '46 minutes', '23.180.120.131', 'FAILURE'),
+(1, 'LOGIN_ATTEMPT', 'admin',   NOW() - interval '45 minutes', '23.180.120.131', 'FAILURE'),
+(1, 'LOGIN_ATTEMPT', 'user_22', NOW() - interval '42 minutes', '192.168.1.31', 'FAILURE'),
+(1, 'LOGIN_ATTEMPT', 'admin',   NOW() - interval '39 minutes', '96.248.32.65', 'FAILURE'),
+(1, 'LOGIN_ATTEMPT', 'root',    NOW() - interval '38 minutes', '96.248.32.65', 'FAILURE'),
+(1, 'LOGIN_ATTEMPT', 'admin',   NOW() - interval '37 minutes', '96.248.32.65', 'FAILURE'),
+(1, 'LOGIN_ATTEMPT', 'admin',   NOW() - interval '35 minutes', '23.132.164.238', 'FAILURE'),
+(1, 'LOGIN_ATTEMPT', 'root',    NOW() - interval '34 minutes', '23.132.164.238', 'FAILURE'),
+(1, 'LOGIN_ATTEMPT', 'admin',   NOW() - interval '33 minutes', '115.96.204.73', 'FAILURE'),
+(1, 'LOGIN_ATTEMPT', 'root',    NOW() - interval '32 minutes', '115.96.204.73', 'FAILURE'),
+(1, 'LOGIN_ATTEMPT', 'admin',   NOW() - interval '31 minutes', '121.237.10.107', 'FAILURE'),
+(1, 'LOGIN_ATTEMPT', 'root',    NOW() - interval '30 minutes', '121.237.10.107', 'FAILURE'),
+(1, 'LOGIN_ATTEMPT', 'admin',   NOW() - interval '29 minutes', '121.237.10.107', 'FAILURE');
 
 -- CREATE INDEX IF NOT EXISTS idx_client_logs_datetime
 --   ON client_logs (log_date_time);
@@ -76,7 +86,7 @@ CREATE TABLE IF NOT EXISTS ip_reputation (
 
 CREATE TABLE IF NOT EXISTS alerts (
   id BIGSERIAL PRIMARY KEY,
-  alert_type TEXT NOT NULL,              -- BLACKLIST_IP, FAILED_LOGINS
+  alert_type TEXT NOT NULL,              -- BLACKLISTED_IP, FAILED_LOGINS
   ip_address TEXT NOT NULL,
   severity TEXT NOT NULL,               -- low | medium | high
   details JSONB NOT NULL DEFAULT '{}'::jsonb,
