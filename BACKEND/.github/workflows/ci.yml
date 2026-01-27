@@ -39,4 +39,4 @@ jobs:
           ABUSE_KEY: ${{ secrets.ABUSE_KEY }}
           DB_URL: ${{ secrets.DB_URL }}
         
-        run: kk
+        run: node BACKEND/src/jobs/refreshIPRep.js
