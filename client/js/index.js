@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", () => {
+// document.addEventListener("DOMContentLoaded", () => {
 
   //   const token = localStorage.getItem("token");
   // if (!token) {
@@ -582,6 +582,56 @@ async function loadLoginActivityChart(hoursBack = 24) {
     const hours = parseInt(e.target.value);
     loadLoginActivityChart(hours);
   });
-});
 
+// module.exports = {
+//   loadAlerts,
+//   refreshAlerts,
+//   minutesAgo,
+//   isToday,
+//   computeRiskLevel,
+//   loadRiskBanner,
+//   loadLoginOutcomes,
+//   loadUniqueIPs,
+//   loadBlacklistedIPs,
+//   refreshIPReputation,
+//   renderAlertsTable,
+//   loadLoginActivityChart
+// }
+// });
 
+// if (typeof window !== 'undefined') {
+//   document.addEventListener("DOMContentLoaded", () => {
+//     loadAlerts();
+//     loadRiskBanner();
+//     loadLoginOutcomes();
+//     loadUniqueIPs();
+//     loadBlacklistedIPs();
+//     loadLoginActivityChart()
+//   });
+
+const exported = {
+  loadAlerts,
+  refreshAlerts,
+  minutesAgo,
+  isToday,
+  computeRiskLevel,
+  loadRiskBanner,
+  loadLoginOutcomes,
+  loadUniqueIPs,
+  loadBlacklistedIPs,
+  refreshIPReputation,
+  renderAlertsTable,
+  loadLoginActivityChart,
+};
+
+// If running in Node (Jest), module exists:
+if (typeof module !== "undefined" && module.exports) {
+  module.exports = exported;
+}
+
+// If running in the browser, put them on window for debugging/manual calls:
+if (typeof window !== "undefined") {
+  window.dashboard = exported;
+}
+
+// });
