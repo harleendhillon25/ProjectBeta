@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
 async function loadSecurityDetails() {
   try {
     const res = await fetch("http://localhost:3000/alerts?limit=20", {
-      headers: { 
+      headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
         "Content-Type": "application/json"
       },
@@ -71,9 +71,9 @@ function renderSecurityDetails(alert) {
   // Update alert banner
   const alertBanner = document.querySelector(".alert");
   if (alertBanner) {
-  const alertType = alert.alert_type_name || alert.alert_type.replace(/_/g, " ").toLowerCase();
+    const alertType = alert.alert_type_name || alert.alert_type.replace(/_/g, " ").toLowerCase();
     alertBanner.textContent = `⚠️ Alert: ${alertType} detected from ${alert.ip_address}`;
-    
+
     // Style based on severity
     if (alert.severity === 'HIGH') {
       alertBanner.style.backgroundColor = '#ffebee';
@@ -126,7 +126,7 @@ function renderSecurityDetails(alert) {
 
 // ---------------- GET THREAT TYPE NAME ----------------
 function getThreatTypeName(alert) {
-    return alert.alert_type_name || alert.alert_type.replace(/_/g, ' ');
+  return alert.alert_type_name || alert.alert_type.replace(/_/g, ' ');
 }
 
 // ---------------- UPDATE FLAGGED REASON ----------------
@@ -140,23 +140,23 @@ function updateFlaggedReason(alert) {
     const failedCount = details.failed_count || 0;
     const timeWindow = details.window_minutes || 60;
     const lastSeen = details.last_seen ? new Date(details.last_seen).toLocaleString() : 'recently';
-    
+
     reasonParagraph.textContent = `This IP address has made ${failedCount} failed login attempts within ${timeWindow} minutes (last seen: ${lastSeen}). This pattern is consistent with automated password guessing tools attempting to gain unauthorized access to user accounts.`;
-  
+
   } else if (alert.alert_type === 'BRUTE_FORCE_ATTACK') {
     reasonParagraph.textContent = `This IP address is conducting systematic password guessing attempts across multiple user accounts. This behavior is characteristic of credential stuffing or distributed brute force attacks.`;
-  
+
   } else if (alert.alert_type === 'ACCOUNT_TAKEOVER') {
     reasonParagraph.textContent = `Suspicious account activity indicating potential compromise detected. This includes unusual login patterns, location changes, or unauthorized access to sensitive resources.`;
-  
+
   } else if (alert.alert_type === 'BLACKLISTED_IP') {
     const abuseScore = details.abuse_confidence || 0;
     const totalReports = details.total_reports || 0;
     const usageType = details.usage_type || 'Unknown';
     const lastReported = details.last_reported_at ? new Date(details.last_reported_at).toLocaleDateString() : 'Unknown';
-    
+
     reasonParagraph.textContent = `This IP address has been reported ${totalReports} times to AbuseIPDB with an abuse confidence score of ${abuseScore}%. Usage type: ${usageType}. Last reported: ${lastReported}. It is associated with malicious activities including spam, hacking attempts, and credential theft.`;
-  
+
   } else {
     reasonParagraph.textContent = `This IP address has been flagged due to suspicious activity patterns detected by our security monitoring system.`;
   }
@@ -225,4 +225,15 @@ document.getElementById("back-to-dashboard")?.addEventListener("click", () => {
   sessionStorage.removeItem("selectedAlert");
   window.location.href = "index.html";
 });
+if (typeof module !== "undefined") {
+  module.exports = {
+    loadSecurityDetails,
+    renderSecurityDetails,
+    getThreatTypeName,
+    updateFlaggedReason,
+    updateAIRecommendedActions,
+    showNoThreatsDetected,
+    showErrorState,
+  };
+}
 
