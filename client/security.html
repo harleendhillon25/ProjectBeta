@@ -24,96 +24,85 @@
 
 
   <!-- Main content -->
-  <main class="main">
+ <!-- Main content -->
+<main class="main">
+
+  <!-- ACCESS WARNING (stays OUTSIDE content wrapper) -->
+  <div id="access-warning" class="access-warning hidden">
+    <h2>Access Restricted</h2>
+    <p>
+      This page is only accessible by selecting an alert from the dashboard.
+    </p>
+    <button id="go-dashboard">Go to Dashboard</button>
+  </div>
+
+  <!-- EVERYTHING BELOW IS PROTECTED CONTENT -->
+  <div id="security-content">
 
     <div class="header">
-  <h1>Main Dashboard</h1>
+      <h1>Threat & Security</h1>
 
-  <div class="header-actions">
-    <button type="button" id="refresh-alerts" class="refresh-btn">
-      Refresh Alerts
-    </button>
-    <button type="button" class="logout-btn">
-      Log out
-    </button>
-  </div>
-</div>
+    
+      <div class="header-actions">
+        <button type="button" class="back-btn">
+        ← Back to Dashboard
+        </button>
+        <button type="button" id="refresh-alerts" class="refresh-btn">
+          Refresh Alerts
+        </button>
+        <button type="button" class="logout-btn">
+          Log out
+        </button>
+      </div>
+    </div>
 
     <div class="container">
 
-    <div class="alert">
-      ⚠️ Loading security data...
-    </div>
-
-    <h2>IP Security Details</h2>
-
-    <div class="info-grid">
-      <div class="info-box">
-        <div class="label">IP Address</div>
-        <div class="value">--</div>
+      <div class="alert">
+        ⚠️ Loading security data...
       </div>
 
-      <div class="info-box">
-        <div class="label">Severity</div>
-        <div class="value">
-          <span class="risk">--</span>
+      <h2>IP Security Details</h2>
+
+      <div class="info-grid">
+        <div class="info-box">
+          <div class="label">IP Address</div>
+          <div class="value">--</div>
+        </div>
+
+        <div class="info-box">
+          <div class="label">Severity</div>
+          <div class="value">
+            <span class="risk">--</span>
+          </div>
+        </div>
+
+        <div class="info-box">
+          <div class="label">Location</div>
+          <div class="value">--</div>
+        </div>
+
+        <div class="info-box">
+          <div class="label">Threat Type</div>
+          <div class="value">--</div>
         </div>
       </div>
 
-      <div class="info-box">
-        <div class="label">Location</div>
-        <div class="value">--</div>
+      <h3>Why this IP was flagged</h3>
+      <p class="flagged-reason">Loading threat analysis...</p>
+
+      <div class="ai-assistant">
+        <h3>🤖 AI Security Assistant</h3>
+        <div class="ai-response">
+          <strong>Recommended actions:</strong>
+          <p>Loading...</p>
+        </div>
       </div>
 
-      <div class="info-box">
-        <div class="label">Threat Type</div>
-        <div class="value">--</div>
-      </div>
     </div>
-
-    <h3>Why this IP was flagged</h3>
-    <p class="flagged-reason">Loading threat analysis...</p>
-
-    <!-- <h3>Recommended Actions</h3>
-    <ul>
-      <li>Block the IP address at firewall or application level</li>
-      <li>Enable CAPTCHA after repeated failed login attempts</li>
-      <li>Implement rate limiting (max 5 attempts per 15 minutes)</li>
-      <li>Review recent authentication logs for affected accounts</li>
-      <li>Consider enabling multi-factor authentication (MFA) for all users</li>
-    </ul> -->
-
-    <!-- AI Security Assistant (Placeholder) -->
-<div class="ai-assistant">
-  <h3>🤖 AI Security Assistant</h3>
-  <!-- <p class="ai-description">
-    Ask our AI assistant for recommended actions based on this threat.
-  </p> -->
-
-  <!-- <div class="ai-box">
-    <input 
-      type="text" 
-      placeholder="Ask AI e.g. 'How serious is this threat?'" 
-      disabled
-    />
-    <button class="btn btn-ai" disabled>
-      Ask AI
-    </button>
-  </div> -->
-
-  <div class="ai-response">
-    <strong>Recommended actions:</strong>
-    <p>
-      Loading...
-    </p>
   </div>
-</div>
+</main>
 
-
-
-  </div>
-
-  </main>
 
   </div>
   <script src="js/security.js"></script>

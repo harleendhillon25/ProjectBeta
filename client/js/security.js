@@ -1,26 +1,42 @@
 document.addEventListener("DOMContentLoaded", () => {
+  const storedAlert = sessionStorage.getItem("selectedAlert");
+  const warning = document.getElementById("access-warning");
+  const mainContent = document.getElementById("security-content");
 
-  // LOGOUT → LOGIN PAGE
-  const logoutBtn = document.querySelector(".logout-btn");
-  if (logoutBtn) {
-    logoutBtn.addEventListener("click", () => {
-      localStorage.removeItem("token");
-      window.location.href = "login.html";
+  if (!storedAlert) {
+    // Show graceful warning instead of blocking
+    warning?.classList.remove("hidden");
+    mainContent?.classList.add("hidden");
+
+    document.getElementById("go-dashboard")?.addEventListener("click", () => {
+      window.location.href = "index.html";
     });
+
+    return;
   }
 
-  // SIDEBAR ACTIVE LINK
-  document.querySelectorAll(".sidebar a").forEach(link => {
-    if (link.getAttribute("href") === "security.html") {
-      link.classList.add("active");
-    } else {
-      link.classList.remove("active");
-    }
+  const alert = JSON.parse(storedAlert);
+
+  // LOGOUT
+  const logoutBtn = document.querySelector(".logout-btn");
+  logoutBtn?.addEventListener("click", () => {
+    sessionStorage.removeItem("selectedAlert");
+    localStorage.removeItem("token");
+    window.location.href = "login.html";
   });
 
-  // LOAD SECURITY DETAILS
-  loadSecurityDetails();
+  // SIDEBAR ACTIVE LINK (visual only)
+  document.querySelectorAll(".sidebar a").forEach(link => {
+    link.classList.toggle(
+      "active",
+      link.getAttribute("href") === "security.html"
+    );
+  });
+
+  // LOAD DETAILS
+  renderSecurityDetails(alert);
 });
+
 
 // ---------------- LOAD SECURITY DETAILS ----------------
 async function loadSecurityDetails() {
@@ -200,3 +216,13 @@ function showErrorState(message) {
     alertBanner.style.borderLeft = "4px solid #d32f2f";
   }
 }
+
+window.addEventListener("beforeunload", () => {
+  sessionStorage.removeItem("selectedAlert");
+});
+
+document.getElementById("back-to-dashboard")?.addEventListener("click", () => {
+  sessionStorage.removeItem("selectedAlert");
+  window.location.href = "index.html";
+});
+

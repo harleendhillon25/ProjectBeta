@@ -227,16 +227,32 @@ function renderAlertsTable(alerts) {
 
   alerts.forEach(alert => {
     const row = document.createElement("tr");
+    row.classList.add("clickable-row");
+
     row.innerHTML = `
       <td>${new Date(alert.created_at).toLocaleString()}</td>
       <td>${alert.alert_type.replace(/_/g, " ")}</td>
-      <td><span class="tag ${alert.severity.toLowerCase()}">${alert.severity}</span></td>
+      <td>
+        <span class="tag ${alert.severity.toLowerCase()}">
+          ${alert.severity}
+        </span>
+      </td>
       <td>${alert.ip_address || "Unknown"}</td>
     `;
-    row.title = alert.details ? JSON.stringify(alert.details) : "";
+
+    // 👉 CLICK HANDLER
+    row.addEventListener("click", () => {
+      sessionStorage.setItem(
+        "selectedAlert",
+        JSON.stringify(alert)
+      );
+      window.location.href = "security.html";
+    });
+
     tbody.appendChild(row);
   });
 }
+
 
 // LOAD METRICS
  async function loadMetrics() {

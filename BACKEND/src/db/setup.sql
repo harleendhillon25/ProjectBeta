@@ -122,4 +122,7 @@ INSERT INTO alert_types (alert_code, name, description, severity, category, reco
 
 ('ACCOUNT_TAKEOVER', 'Account Takeover', 'Suspicious account activity indicating potential compromise', 'HIGH', 'Authentication', 'Lock account immediately, notify user, force credential reset'),
 
-('BLACKLISTED_IP', 'Blacklisted IP', 'Connection from known malicious IP address (AbuseIPDB score >= 50)', 'HIGH', 'Network', 'Block IP at firewall level, review all recent activity from this IP');
+('BLACKLISTED_IP', 'Blacklisted IP', 'Connection from known malicious IP address (AbuseIPDB score >= 50)', 'HIGH', 'Network', 'Block IP at firewall level, review all recent activity from this IP')
+
+ON CONFLICT (alert_code) DO NOTHING;
+
