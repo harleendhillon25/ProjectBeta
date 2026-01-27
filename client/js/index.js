@@ -1,10 +1,10 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-   /* const token = localStorage.getItem("token");
-  if (!token) {
-    window.location.assign("login.html");
-    return;
-  } */
+  //   const token = localStorage.getItem("token");
+  // if (!token) {
+  //   window.location.assign("login.html");
+  //   return;
+  // }
 
   // LOGOUT → LOGIN PAGE
   const logoutBtn = document.querySelector(".logout-btn");
