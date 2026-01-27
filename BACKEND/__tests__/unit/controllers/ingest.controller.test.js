@@ -1,5 +1,6 @@
 // ingest.controller.test.js
-const { ingestLog } = require('../../../src/controllers/ingest.controller.js');
+const pool = require("../../../src/db/connect.js")
+const { ingestLog, getLogs } = require('../../../src/controllers/ingest.controller.js');
 const { IngestModel } = require('../../../src/models/ingest.model.js');
 
 
@@ -90,6 +91,55 @@ describe('ingestLog controller', () => {
 
     await ingestLog(req, res);
 
+    expect(res.status).toHaveBeenCalledWith(500);
+    expect(res.json).toHaveBeenCalledWith({ error: 'Server error' });
+  });
+});
+
+describe('getLogs controller', () => {
+  let res;
+
+  beforeEach(() => {
+    res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+
+    jest.clearAllMocks();
+  });
+
+  it('should return the latest logs ordered by log_date_time', async () => {
+    // Arrange
+    const fakeLogs = [
+      { id: 1, ip_address: '10.0.0.1', log_date_time: '2026-01-26T10:00:00Z' },
+      { id: 2, ip_address: '10.0.0.2', log_date_time: '2026-01-26T09:55:00Z' },
+    ];
+
+    jest.spyOn(pool, 'query').mockResolvedValueOnce({ rows: fakeLogs });
+
+    // Act
+    await getLogs({}, res);
+
+    // Assert
+    expect(pool.query).toHaveBeenCalledTimes(1);
+    expect(pool.query).toHaveBeenCalledWith(
+      expect.stringContaining('FROM client_logs')
+    );
+    expect(pool.query).toHaveBeenCalledWith(
+      expect.stringContaining('ORDER BY log_date_time DESC')
+    );
+
+    expect(res.json).toHaveBeenCalledWith({ data: fakeLogs });
+  });
+
+  it('should return 500 if the database query fails', async () => {
+    // Arrange
+    jest.spyOn(pool, 'query').mockRejectedValueOnce(new Error('DB error'));
+
+    // Act
+    await getLogs({}, res);
+
+    // Assert
     expect(res.status).toHaveBeenCalledWith(500);
     expect(res.json).toHaveBeenCalledWith({ error: 'Server error' });
   });
