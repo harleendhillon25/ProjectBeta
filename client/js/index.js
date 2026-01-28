@@ -322,7 +322,7 @@
         <td>${alert.ip_address || "Unknown"}</td>
       `;
 
-      // 👉 CLICK HANDLER
+      //CLICK HANDLER
       row.addEventListener("click", () => {
         sessionStorage.setItem("selectedAlert", JSON.stringify(alert));
         window.location.href = "security.html";
@@ -333,6 +333,26 @@
   }
 
   // ================ LOGIN ACTIVITY CHART (WITH TIME PERIOD SELECTOR) ================
+  // LOAD ALERTS
+ 
+// ---------------- ALERTS ----------------
+//----- this is the original loadAlerts function with token -----
+// async function loadAlerts() {
+//   try {
+//     const res = await fetch("http://localhost:3000/alerts", 
+//       {
+//       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+//     });
+//     if (!res.ok) throw new Error("Failed to load alerts");
+
+//     const json = await res.json();
+//     renderAlertsTable(json.data || []);
+//   } catch (err) {
+//     console.error("Alerts load error:", err);
+//   }
+// }
+
+// load alerts without token for demo purposes
 
   let chartInstance = null; // Store chart instance globally
 
