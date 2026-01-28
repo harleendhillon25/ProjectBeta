@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // ---------------- LOAD SECURITY DETAILS ----------------
 async function loadSecurityDetails() {
   try {
-    // ⬇️ ONLY CHANGE: relative path instead of localhost
+    // relative path instead of localhost
     const res = await fetch("/alerts?limit=20", {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,

@@ -21,7 +21,7 @@ if (loginForm) {
       })
     };
 
-    // ⬇️ ONLY CHANGE: use relative path instead of localhost
+    //use relative path instead of localhost
     const response = await fetch("/clients/login", options);
     await response.json();
 
