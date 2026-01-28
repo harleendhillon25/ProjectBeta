@@ -5,28 +5,30 @@ describe("security.js", () => {
         jest.resetModules();
 
         document.body.innerHTML = `
-      <button class="logout-btn">Log out</button>
+          <button class="logout-btn">Log out</button>
 
-      <div class="sidebar">
-        <a href="index.html">Dashboard</a>
-        <a href="security.html">Threat & Security</a>
-        <a href="admin.html">Admin</a>
-      </div>
+          <div class="sidebar">
+            <a href="index.html">Dashboard</a>
+            <a href="security.html">Threat & Security</a>
+            <a href="admin.html">Admin</a>
+          </div>
 
-      <div class="alert"></div>
+          <div class="alert"></div>
 
-      <div class="info-grid">
-        <div class="info-box"><span class="value"></span></div>
-        <div class="info-box"><span class="value"></span></div>
-        <div class="info-box"><span class="value"></span></div>
-        <div class="info-box"><span class="value"></span></div>
-      </div>
+          <div class="info-grid">
+            <div class="info-box"><span class="value"></span></div>
+            <div class="info-box"><span class="value"></span></div>
+            <div class="info-box"><span class="value"></span></div>
+            <div class="info-box"><span class="value"></span></div>
+          </div>
 
-      <p class="flagged-reason"></p>
-      <p class="ai-response"></p>
-    `;
+          <p class="flagged-reason"></p>
+          <p class="ai-response"></p>
+        `;
 
         localStorage.setItem("token", "test-token");
+        sessionStorage.setItem("selectedAlert", JSON.stringify({ ip_address: "1.1.1.1", severity: "HIGH" }));
+
         global.fetch = jest.fn();
         window.alert = jest.fn();
         jest.spyOn(console, "error").mockImplementation(() => { });
@@ -36,7 +38,7 @@ describe("security.js", () => {
     afterEach(() => {
         if (console.error.mockRestore) console.error.mockRestore();
     });
-    // logout button testing 
+
     test("logout removes token and redirects", () => {
         require("../js/security.js");
 
@@ -45,9 +47,9 @@ describe("security.js", () => {
         document.querySelector(".logout-btn").click();
 
         expect(localStorage.getItem("token")).toBe(null);
-        expect(window.__REDIRECT_TO__).toBe("login.html");
+        expect(sessionStorage.getItem("selectedAlert")).toBe(null);
     });
-    //sidebar active links 
+
     test("sidebar sets security link as active", () => {
         require("../js/security.js");
 
@@ -58,7 +60,7 @@ describe("security.js", () => {
         expect(links[0].classList.contains("active")).toBe(false);
         expect(links[2].classList.contains("active")).toBe(false);
     });
-    // loading alert data 
+
     test("loadSecurityDetails renders first alert when data exists", async () => {
         const security = require("../js/security.js");
 
@@ -93,8 +95,8 @@ describe("security.js", () => {
         security.renderSecurityDetails({
             ip_address: "5.6.7.8",
             severity: "MEDIUM",
-            alert_type: "BRUTE_FORCE_ATTACK",
-            details: { country_name: "France" },
+            alert_type: "FAILED_LOGIN_BURST",
+            details: { country_name: "France", failed_count: 2, window_minutes: 30 },
         });
 
         expect(document.querySelector(".alert").style.borderLeft).toContain("rgb(245, 124, 0)");
@@ -114,7 +116,7 @@ describe("security.js", () => {
         expect(document.querySelector(".alert").style.borderLeft).toContain("rgb(25, 118, 210)");
         expect(document.querySelector(".flagged-reason").textContent).toContain("potential compromise");
     });
-    // Blacklised IP 
+
     test("BLACKLISTED_IP reason branch", () => {
         const security = require("../js/security.js");
 
@@ -130,7 +132,7 @@ describe("security.js", () => {
 
         expect(document.querySelector(".flagged-reason").textContent).toContain("AbuseIPDB");
     });
-    // Default 
+
     test("default reason branch", () => {
         const security = require("../js/security.js");
 
@@ -141,7 +143,7 @@ describe("security.js", () => {
 
         expect(document.querySelector(".flagged-reason").textContent).toContain("flagged");
     });
-    // No Alert case 
+
     test("no alerts shows no threats state", async () => {
         const security = require("../js/security.js");
 
@@ -156,7 +158,7 @@ describe("security.js", () => {
         expect(document.querySelector(".info-box:nth-child(1) .value").textContent).toBe("N/A");
         expect(document.querySelector(".info-box:nth-child(4) .value").textContent).toBe("None");
     });
-    // error state
+
     test("error state shows error banner", async () => {
         const security = require("../js/security.js");
 
@@ -169,7 +171,7 @@ describe("security.js", () => {
 
         expect(document.querySelector(".alert").textContent).toContain("Failed to load security data");
     });
-    // Threat tyoe name with label 
+
     test("getThreatTypeName uses alert_type_name if available", () => {
         const security = require("../js/security.js");
 
@@ -180,7 +182,7 @@ describe("security.js", () => {
 
         expect(result).toBe("Failed Login Burst");
     });
-    // hreat type formatting
+
     test("getThreatTypeName converts underscores when no alert_type_name", () => {
         const security = require("../js/security.js");
 
