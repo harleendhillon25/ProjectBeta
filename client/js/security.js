@@ -163,6 +163,15 @@ function updateFlaggedReason(alert) {
 }
 
 // ---------------- UPDATE AI RECOMMENDED ACTIONS ----------------
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
 function updateAIRecommendedActions(alert) {
   const aiResponseText = document.querySelector(".ai-response");
   if (!aiResponseText) return;
@@ -170,7 +179,9 @@ function updateAIRecommendedActions(alert) {
   // Get recommended actions from alert_types table mapping
   const recommendedActions = alert.recommended_action || "Monitor the IP address closely and consider blocking if suspicious activity continues.";
 
-  aiResponseText.textContent = `🤖 AI Security Assistant suggests: ${recommendedActions}`;
+  const steps = recommendedActions.split('\n').map(step => step.replace(/^\s*[-•*]\s*/, '').trim()).filter(step => step.length > 0);
+
+  aiResponseText.innerHTML = `Recommended next steps:<ul>${steps.map(step => `<li>${escapeHtml(step)}</li>`).join('')}</ul>`;
 }
 
 // ---------------- NO THREATS DETECTED ----------------
