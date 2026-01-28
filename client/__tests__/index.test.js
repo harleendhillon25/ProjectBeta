@@ -1,114 +1,146 @@
-const { renderDOM } = require("./helpers");
+/**
+ * @jest-environment jsdom
+ */
 
-describe("Dashboard (index.html)", () => {
-  let dom;
-  let document;
+const fs = require("fs");
+const path = require("path");
 
-  beforeEach(async () => {
-    // Render the dashboard HTML
-    dom = await renderDOM("./client/index.html");
-    document = dom.window.document;
+let indexJS;
+let html;
 
-    // Expose globals for index.js
-    global.window = dom.window;
-    global.document = document;
-
-    // Load dashboard JS AFTER DOM exists
-    require("../js/index.js");
-  });
-
-  test("page loads with correct title", () => {
-    expect(document.title).toBe("Dashboard");
-  });
-
-  test("renders sidebar navigation", () => {
-    expect(document.querySelector(".sidebar")).toBeTruthy();
-  });
-
-  test("sidebar contains 3 navigation links", () => {
-    expect(document.querySelectorAll(".sidebar a").length).toBe(3);
-  });
-
-  test("renders Main Dashboard heading", () => {
-    expect(document.querySelector("h1").textContent.trim())
-      .toBe("Main Dashboard");
-  });
-
-  test("logout button exists", () => {
-    const logoutBtn = document.querySelector(".logout-btn");
-    expect(logoutBtn).toBeTruthy();
-    expect(logoutBtn.textContent.trim()).toBe("Log out");
-  });
-
-  test("risk banner exists", () => {
-    // Banner text is dynamic, so only test presence
-    const banner = document.querySelector(".risk-banner");
-    expect(banner).toBeTruthy();
-  });
-
-  test("metrics section displays 3 metric cards", () => {
-    expect(document.querySelectorAll(".metric-card").length).toBe(3);
-  });
-
-  test("login outcomes card exists", () => {
-    const card = document.querySelector(".login-card");
-    expect(card).toBeTruthy();
-    expect(card.textContent).toContain("Login Outcomes");
-  });
-
-  test("recent suspicious activity table exists", () => {
-    expect(document.querySelector("table")).toBeTruthy();
-    expect(document.querySelector("tbody")).toBeTruthy();
-  });
-
-  test("suspicious activity rows are clickable", () => {
-    /**
-     * Rows are dynamically injected in real usage,
-     * so we test that rows SUPPORT click behaviour.
-     */
-
-    const row = document.createElement("tr");
-
-    let clicked = false;
-    row.addEventListener("click", () => {
-      clicked = true;
-    });
-
-    row.click();
-    expect(clicked).toBe(true);
-  });
-
-test("clicking a suspicious activity row triggers navigation to security page", () => {
-  const tbody = document.querySelector("#alerts-table-body");
-
-  const mockAlert = {
-    created_at: new Date().toISOString(),
-    alert_type: "FAILED_LOGIN_BURST",
-    severity: "HIGH",
-    ip_address: "192.168.1.1"
-  };
-
-  // Manually reproduce the row the same way index.js does
-  const row = document.createElement("tr");
-  row.innerHTML = `
-    <td>${new Date(mockAlert.created_at).toLocaleString()}</td>
-    <td>FAILED LOGIN BURST</td>
-    <td><span class="tag high">HIGH</span></td>
-    <td>${mockAlert.ip_address}</td>
-  `;
-
-  row.addEventListener("click", () => {
-    sessionStorage.setItem("selectedAlert", JSON.stringify(mockAlert));
-    window.location.href = "security.html";
-  });
-
-  tbody.appendChild(row);
-
-  // Act
-  row.click();
-
-  // Assert intent (JSDOM-safe)
-  const stored = sessionStorage.getItem("selectedAlert");
-  expect(stored).not.toBeNull();
+beforeAll(() => {
+  html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
 });
+
+beforeEach(() => {
+  // Load DOM
+  document.documentElement.innerHTML = html;
+
+  // Mock localStorage
+  const storage = {};
+  jest.spyOn(Storage.prototype, "getItem").mockImplementation((key) => storage[key] || null);
+  jest.spyOn(Storage.prototype, "setItem").mockImplementation((key, value) => {
+    storage[key] = value;
+  });
+  jest.spyOn(Storage.prototype, "removeItem").mockImplementation((key) => {
+    delete storage[key];
+  });
+
+  // Mock fetch
+  global.fetch = jest.fn((url, opts) => {
+    if (url.endsWith("/alerts")) {
+      return Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve({
+          data: [
+            { created_at: new Date().toISOString(), alert_type: "BLACKLISTED_IP", severity: "MEDIUM", ip_address: "1.1.1.1" }
+          ]
+        }),
+      });
+    }
+    if (url.endsWith("/alerts/refresh")) {
+      return Promise.resolve({ ok: true });
+    }
+    if (url.endsWith("/logs")) {
+      return Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve({
+          data: [
+            { log_date_time: new Date().toISOString(), status: "SUCCESS" },
+            { log_date_time: new Date().toISOString(), status: "FAILURE" },
+          ],
+        }),
+      });
+    }
+    if (url.endsWith("/ips/refresh")) {
+      return Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve({
+          data: [
+            { ip_address: "1.1.1.1" },
+            { ip_address: "2.2.2.2" },
+          ],
+        }),
+      });
+    }
+    return Promise.resolve({ ok: true, json: () => Promise.resolve({ data: [] }) });
+  });
+
+  // Mock window.location safely
+  delete window.location;
+  window.location = { pathname: "/index.html", href: "" };
+
+  // Mock Chart
+  class ChartMock {
+    constructor() { this.destroy = jest.fn(); }
+  }
+  global.Chart = ChartMock;
+
+  jest.isolateModules(() => {
+    indexJS = require("../js/index.js");
+  });
+});
+
+afterEach(() => {
+  jest.restoreAllMocks();
+  jest.resetModules();
+});
+
+describe("Dashboard Tests", () => {
+  test("Logout button removes token", () => {
+    const logoutBtn = document.querySelector(".logout-btn");
+    logoutBtn.click();
+    expect(localStorage.removeItem).toHaveBeenCalledWith("token");
+  });
+
+  test("Sidebar highlights active link", () => {
+    document.querySelectorAll(".sidebar a").forEach(link => {
+      if (link.getAttribute("href") === "index.html") {
+        expect(link.classList.contains("active")).toBe(true);
+      }
+    });
+  });
+
+
+  test("refreshAlerts calls /alerts/refresh", async () => {
+    await indexJS.refreshAlerts();
+    expect(fetch).toHaveBeenCalledWith("/alerts/refresh", expect.any(Object));
+  });
+
+  test("Risk banner displays correct risk level", async () => {
+    await indexJS.loadRiskBanner();
+    const banner = document.getElementById("risk-banner");
+    expect(banner.textContent).toContain("Moderate Risk");
+  });
+
+  test("loadLoginOutcomes updates counts and chart", async () => {
+    await indexJS.loadLoginOutcomes();
+    expect(document.getElementById("login-success-count").textContent).toBe("1");
+    expect(document.getElementById("login-failed-count").textContent).toBe("1");
+  });
+
+  test("loadUniqueIPs updates unique IP count", async () => {
+    await indexJS.loadUniqueIPs();
+    expect(document.getElementById("unique-ip-count").textContent).toBe("2");
+  });
+
+  test("loadBlacklistedIPs updates blacklisted IP count", async () => {
+    await indexJS.loadBlacklistedIPs();
+    expect(document.getElementById("blacklisted-ip-count").textContent).toBe("1");
+  });
+
+  test("loadLoginActivityChart renders chart", async () => {
+    await indexJS.loadLoginActivityChart();
+    // ChartMock used, nothing to assert, just ensure no errors
+  });
+
+  test("renderAlertsTable creates clickable rows", () => {
+    const alerts = [
+      { created_at: new Date().toISOString(), alert_type: "TEST_ALERT", severity: "LOW", ip_address: "1.2.3.4" }
+    ];
+    indexJS.renderAlertsTable(alerts);
+    const row = document.querySelector("#alerts-table-body tr");
+    expect(row).toBeTruthy();
+    expect(row.classList.contains("clickable-row")).toBe(true);
+  });
 });
