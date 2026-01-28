@@ -41,7 +41,8 @@ document.addEventListener("DOMContentLoaded", () => {
 // ---------------- LOAD SECURITY DETAILS ----------------
 async function loadSecurityDetails() {
   try {
-    const res = await fetch("http://localhost:3000/alerts?limit=20", {
+    // ⬇️ ONLY CHANGE: relative path instead of localhost
+    const res = await fetch("/alerts?limit=20", {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
         "Content-Type": "application/json"
@@ -71,22 +72,25 @@ function renderSecurityDetails(alert) {
   // Update alert banner
   const alertBanner = document.querySelector(".alert");
   if (alertBanner) {
-    const alertType = alert.alert_type_name || alert.alert_type.replace(/_/g, " ").toLowerCase();
+    const alertType =
+      alert.alert_type_name ||
+      alert.alert_type.replace(/_/g, " ").toLowerCase();
+
     alertBanner.textContent = `⚠️ Alert: ${alertType} detected from ${alert.ip_address}`;
 
     // Style based on severity
-    if (alert.severity === 'HIGH') {
-      alertBanner.style.backgroundColor = '#ffebee';
-      alertBanner.style.color = '#d32f2f';
-      alertBanner.style.borderLeft = '4px solid #d32f2f';
-    } else if (alert.severity === 'MEDIUM') {
-      alertBanner.style.backgroundColor = '#fff3e0';
-      alertBanner.style.color = '#f57c00';
-      alertBanner.style.borderLeft = '4px solid #f57c00';
+    if (alert.severity === "HIGH") {
+      alertBanner.style.backgroundColor = "#ffebee";
+      alertBanner.style.color = "#d32f2f";
+      alertBanner.style.borderLeft = "4px solid #d32f2f";
+    } else if (alert.severity === "MEDIUM") {
+      alertBanner.style.backgroundColor = "#fff3e0";
+      alertBanner.style.color = "#f57c00";
+      alertBanner.style.borderLeft = "4px solid #f57c00";
     } else {
-      alertBanner.style.backgroundColor = '#e3f2fd';
-      alertBanner.style.color = '#1976d2';
-      alertBanner.style.borderLeft = '4px solid #1976d2';
+      alertBanner.style.backgroundColor = "#e3f2fd";
+      alertBanner.style.color = "#1976d2";
+      alertBanner.style.borderLeft = "4px solid #1976d2";
     }
   }
 
@@ -106,27 +110,22 @@ function renderSecurityDetails(alert) {
   // Update Location
   const locationValue = document.querySelector(".info-box:nth-child(3) .value");
   if (locationValue) {
-    const location = details.country_name || "Unknown";
-    locationValue.textContent = location;
+    locationValue.textContent = details.country_name || "Unknown";
   }
 
   // Update Threat Type
   const threatValue = document.querySelector(".info-box:nth-child(4) .value");
   if (threatValue) {
-    const threatType = getThreatTypeName(alert);
-    threatValue.textContent = threatType;
+    threatValue.textContent = getThreatTypeName(alert);
   }
 
-  // Update "Why this IP was flagged" section
   updateFlaggedReason(alert);
-
-  // Update AI recommended actions
   updateAIRecommendedActions(alert);
 }
 
 // ---------------- GET THREAT TYPE NAME ----------------
 function getThreatTypeName(alert) {
-  return alert.alert_type_name || alert.alert_type.replace(/_/g, ' ');
+  return alert.alert_type_name || alert.alert_type.replace(/_/g, " ");
 }
 
 // ---------------- UPDATE FLAGGED REASON ----------------
@@ -136,29 +135,32 @@ function updateFlaggedReason(alert) {
 
   const details = alert.details || {};
 
-  if (alert.alert_type === 'FAILED_LOGIN_BURST') {
+  if (alert.alert_type === "FAILED_LOGIN_BURST") {
     const failedCount = details.failed_count || 0;
     const timeWindow = details.window_minutes || 60;
-    const lastSeen = details.last_seen ? new Date(details.last_seen).toLocaleString() : 'recently';
+    const lastSeen = details.last_seen
+      ? new Date(details.last_seen).toLocaleString()
+      : "recently";
 
-    reasonParagraph.textContent = `This IP address has made ${failedCount} failed login attempts within ${timeWindow} minutes (last seen: ${lastSeen}). This pattern is consistent with automated password guessing tools attempting to gain unauthorized access to user accounts.`;
+    reasonParagraph.textContent =
+      `This IP address has made ${failedCount} failed login attempts within ${timeWindow} minutes ` +
+      `(last seen: ${lastSeen}). This pattern is consistent with automated password guessing tools.`;
 
-  } else if (alert.alert_type === 'BRUTE_FORCE_ATTACK') {
-    reasonParagraph.textContent = `This IP address is conducting systematic password guessing attempts across multiple user accounts. This behavior is characteristic of credential stuffing or distributed brute force attacks.`;
-
-  } else if (alert.alert_type === 'ACCOUNT_TAKEOVER') {
-    reasonParagraph.textContent = `Suspicious account activity indicating potential compromise detected. This includes unusual login patterns, location changes, or unauthorized access to sensitive resources.`;
-
-  } else if (alert.alert_type === 'BLACKLISTED_IP') {
+  } else if (alert.alert_type === "BLACKLISTED_IP") {
     const abuseScore = details.abuse_confidence || 0;
     const totalReports = details.total_reports || 0;
-    const usageType = details.usage_type || 'Unknown';
-    const lastReported = details.last_reported_at ? new Date(details.last_reported_at).toLocaleDateString() : 'Unknown';
+    const usageType = details.usage_type || "Unknown";
+    const lastReported = details.last_reported_at
+      ? new Date(details.last_reported_at).toLocaleDateString()
+      : "Unknown";
 
-    reasonParagraph.textContent = `This IP address has been reported ${totalReports} times to AbuseIPDB with an abuse confidence score of ${abuseScore}%. Usage type: ${usageType}. Last reported: ${lastReported}. It is associated with malicious activities including spam, hacking attempts, and credential theft.`;
+    reasonParagraph.textContent =
+      `This IP has been reported ${totalReports} times with an abuse confidence score of ` +
+      `${abuseScore}%. Usage type: ${usageType}. Last reported: ${lastReported}.`;
 
   } else {
-    reasonParagraph.textContent = `This IP address has been flagged due to suspicious activity patterns detected by our security monitoring system.`;
+    reasonParagraph.textContent =
+      "This IP address has been flagged due to suspicious activity patterns.";
   }
 }
 
@@ -167,8 +169,9 @@ function updateAIRecommendedActions(alert) {
   const aiResponseText = document.querySelector(".ai-response");
   if (!aiResponseText) return;
 
-  // Get recommended actions from alert_types table mapping
-  const recommendedActions = alert.recommended_action || "Monitor the IP address closely and consider blocking if suspicious activity continues.";
+  const recommendedActions =
+    alert.recommended_action ||
+    "Monitor the IP address closely and consider blocking if activity continues.";
 
   aiResponseText.textContent = `🤖 AI Security Assistant suggests: ${recommendedActions}`;
 }
@@ -177,32 +180,10 @@ function updateAIRecommendedActions(alert) {
 function showNoThreatsDetected() {
   const alertBanner = document.querySelector(".alert");
   if (alertBanner) {
-    alertBanner.textContent = "✅ All Clear: No security threats detected at this time";
+    alertBanner.textContent = "✅ All Clear: No security threats detected";
     alertBanner.style.backgroundColor = "#e8f5e9";
     alertBanner.style.color = "#2e7d32";
     alertBanner.style.borderLeft = "4px solid #2e7d32";
-  }
-
-  const ipValue = document.querySelector(".info-box:nth-child(1) .value");
-  if (ipValue) ipValue.textContent = "N/A";
-
-  const severityValue = document.querySelector(".info-box:nth-child(2) .value");
-  if (severityValue) severityValue.innerHTML = `<span class="risk low">NO THREATS</span>`;
-
-  const locationValue = document.querySelector(".info-box:nth-child(3) .value");
-  if (locationValue) locationValue.textContent = "N/A";
-
-  const threatValue = document.querySelector(".info-box:nth-child(4) .value");
-  if (threatValue) threatValue.textContent = "None";
-
-  const reasonParagraph = document.querySelector(".flagged-reason");
-  if (reasonParagraph) {
-    reasonParagraph.textContent = "Your system is currently secure with no active threats detected. All authentication attempts are within normal parameters. Continue monitoring for any suspicious activity.";
-  }
-
-  const aiResponseText = document.querySelector(".ai-response");
-  if (aiResponseText) {
-    aiResponseText.textContent = "🤖 AI Security Assistant: Your security posture is strong. All systems are operating normally with no detected threats. Continue following security best practices.";
   }
 }
 
@@ -225,6 +206,7 @@ document.getElementById("back-to-dashboard")?.addEventListener("click", () => {
   sessionStorage.removeItem("selectedAlert");
   window.location.href = "index.html";
 });
+
 if (typeof module !== "undefined") {
   module.exports = {
     loadSecurityDetails,
@@ -236,4 +218,3 @@ if (typeof module !== "undefined") {
     showErrorState,
   };
 }
-
