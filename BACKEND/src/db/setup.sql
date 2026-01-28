@@ -86,6 +86,7 @@ CREATE TABLE IF NOT EXISTS ip_reputation (
 
 CREATE TABLE IF NOT EXISTS alerts (
   id BIGSERIAL PRIMARY KEY,
+  client_id INT NOT NULL,
   alert_type TEXT NOT NULL,              -- BLACKLISTED_IP, FAILED_LOGINS
   ip_address TEXT NOT NULL,
   severity TEXT NOT NULL,               -- low | medium | high
@@ -126,13 +127,16 @@ CREATE TABLE IF NOT EXISTS alert_types (
 -- Insert 4 essential alert types
 INSERT INTO alert_types (alert_code, name, description, severity, category, recommended_action) VALUES
 
-('FAILED_LOGIN_BURST', 'Failed Login Burst', 'Multiple failed login attempts from single IP in short time period', 'HIGH', 'Authentication', 'Block IP address, enable CAPTCHA, review authentication logs'),
+('FAILED_LOGIN_BURST', 'Failed Login Burst', 'Multiple failed login attempts from single IP in short time period', 'HIGH', 'Authentication', E'Check which account was targeted and reset the password as a precaution\n Turn on two-factor authentication (2FA) if it is not already enabled\n Monitor sign-in activity for the next 24 hours'),
 
-('BRUTE_FORCE_ATTACK', 'Brute Force Attack', 'Systematic password guessing attempts detected across multiple accounts', 'HIGH', 'Authentication', 'Block IP immediately, enable rate limiting, force password resets'),
+('BRUTE_FORCE_ATTACK', 'Brute Force Attack', 'Systematic password guessing attempts detected across multiple accounts', 'HIGH', 'Authentication', E'Enable two-factor authentication for all users, especially admin accounts\n Make sure passwords are strong and not reused elsewhere\n Monitor login activity closely over the next day'
+),
 
-('ACCOUNT_TAKEOVER', 'Account Takeover', 'Suspicious account activity indicating potential compromise', 'HIGH', 'Authentication', 'Lock account immediately, notify user, force credential reset'),
+('ACCOUNT_TAKEOVER', 'Account Takeover', 'Suspicious account activity indicating potential compromise', 'HIGH', 'Authentication', E'Lock the account and reset the password immediately\n Enable two-factor authentication before re-enabling access\n Contact the user to confirm whether the activity was expected'
+),
 
-('BLACKLISTED_IP', 'Blacklisted IP', 'Connection from known malicious IP address (AbuseIPDB score >= 50)', 'HIGH', 'Network', 'Block IP at firewall level, review all recent activity from this IP')
+('BLACKLISTED_IP', 'Blacklisted IP', 'Connection from known malicious IP address (AbuseIPDB score >= 50)', 'HIGH', 'Network', E'If you use a hosting provider or service like Cloudflare, look for “IP blocking” or “security rules” and block this IP\n Review recent sign-in activity to confirm no accounts were accessed\n If you are unsure how to block an IP, contact your hosting provider or follow their security guide'
+)
 
 ON CONFLICT (alert_code) DO NOTHING;
 
